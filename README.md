@@ -26,7 +26,7 @@ cd reviews-fyi
 **2. Install Flask**
  
 ```bash
-pip install flask
+pip install -r requirements.txt
 
 ```
 
