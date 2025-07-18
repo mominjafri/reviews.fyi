@@ -10,22 +10,24 @@
     <div class="container">
         <h1>reviews.fyi</h1>
 
-        <div class="rating-group">
-            <input type="radio" id="rate1" name="rating" value="1">
-            <label for="rate1">1</label>
-            <input type="radio" id="rate2" name="rating" value="2">
-            <label for="rate2">2</label>
-            <input type="radio" id="rate3" name="rating" value="3">
-            <label for="rate3">3</label>
-            <input type="radio" id="rate4" name="rating" value="4">
-            <label for="rate4">4</label>
-            <input type="radio" id="rate5" name="rating" value="5">
-            <label for="rate5">5</label>
-        </div>
+        <form method="POST">
+            <div class="rating-group">
+                <input type="radio" id="rate1" name="rating" value="1">
+                <label for="rate1">1</label>
+                <input type="radio" id="rate2" name="rating" value="2">
+                <label for="rate2">2</label>
+                <input type="radio" id="rate3" name="rating" value="3">
+                <label for="rate3">3</label>
+                <input type="radio" id="rate4" name="rating" value="4">
+                <label for="rate4">4</label>
+                <input type="radio" id="rate5" name="rating" value="5">
+                <label for="rate5">5</label>
+            </div>
 
-        <textarea class="review-box" placeholder="Write your review here..."></textarea>
-        
-        <button class="submit-btn">Submit</button>
+            <textarea class="review-box" name="review" placeholder="Write your review here..." required></textarea>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
     </div>
 </body>
 </html>
