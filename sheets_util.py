@@ -1,44 +1,27 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from google.oauth2.service_account import Credentials
-from datetime import datetime
-
-# Connect to Google Sheets
-def connect_to_sheet():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
-    client = gspread.authorize(creds)
-    # Open by sheet name or URL
-    sheet = client.open("reviews-fyi").sheet1  # Replace with your actual Sheet name
-    return sheet
-
-# Add a row to the sheet
-from datetime import datetime
+import os
+import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+def get_google_credentials():
+    """Load credentials from environment variable"""
+    creds_json = os.environ.get('GOOGLE_CREDENTIALS')
+    if not creds_json:
+        raise ValueError("Google credentials not found in environment variables")
+    return json.loads(creds_json)
+
 def connect_to_sheet():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
-    client = gspread.authorize(creds)
-    sheet = client.open("reviews-fyi").sheet1  # Make sure your spreadsheet has the correct columns in this order
-    return sheet
+    scope = ['https://www.googleapis.com/auth/spreadsheets']
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+        get_google_credentials(), scope)
+    client = gspread.authorize(credentials)
+    return client.open("reviews-fyi").sheet1
 
-def add_review_to_sheet(boss_first, boss_last, boss_email, company, linkedin_url, overall_rating, fairness, communication, technical, review_text):
-    sheet = connect_to_sheet()
-    row = [
-        boss_first.strip(),
-        boss_last.strip(),
-        boss_email.strip(),
-        company.strip(),
-        linkedin_url.strip() if linkedin_url else "",
-        overall_rating.strip(),
-        fairness.strip(),
-        communication.strip(),
-        technical.strip(),
-        review_text.strip()
-    ]
-    sheet.append_row(row)
-
-
-
+def add_review_to_sheet(*args):
+    try:
+        sheet = connect_to_sheet()
+        sheet.append_row(list(args))
+        return True
+    except Exception as e:
+        print(f"Error writing to sheet: {str(e)}")
+        return False
