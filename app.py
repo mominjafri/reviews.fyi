@@ -26,6 +26,7 @@ def write():
             fairness = request.form["fairness"]
             communication = request.form["communication"]
             technical = request.form["technical"]
+            leadership = request.form["leadership"]
             
             review = request.form["review"]
             
@@ -40,7 +41,8 @@ def write():
                     "overall": rating,
                     "fairness": fairness,
                     "communication": communication,
-                    "technical": technical
+                    "technical": technical,
+                    "leadershp": leadership
                 },
                 "review": review
             })
@@ -48,7 +50,7 @@ def write():
             # Save to sheet
             if add_review_to_sheet(
                 first_name, last_name, email, company, linkedin,
-                rating, fairness, communication, technical, review
+                rating, fairness, communication, technical, leadership, review
             ):
                 return redirect(url_for("thank_you"))
             else:

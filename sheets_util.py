@@ -45,7 +45,7 @@ def connect_to_sheet():
         raise Exception(f"Google Sheets connection failed: {repr(e)}")
 
 def add_review_to_sheet(first_name, last_name, email, company, linkedin,
-                       rating, fairness, communication, technical, review):
+                       rating, fairness, communication, technical, leadership, review):
     """
     Append review data to Google Sheet
     Returns: bool (True if successful)
@@ -62,6 +62,7 @@ def add_review_to_sheet(first_name, last_name, email, company, linkedin,
             fairness,
             communication,
             technical,
+            leadership,
             review
         ])
         return True
