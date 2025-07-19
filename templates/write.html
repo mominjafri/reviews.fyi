@@ -1,32 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Write Review - reviews.fyi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="UTF-8">
+    <title>Write a Review</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>reviews.fyi</h1>
+        <h1>Write a Review</h1>
+        <form method="POST" action="/write">  <!-- Changed from /submit to /write -->
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="company" placeholder="Company" required>
+            <input type="url" name="linkedin" placeholder="LinkedIn Profile (URL)">
 
-        <form method="POST">
-            <div class="rating-group">
-                <input type="radio" id="rate1" name="rating" value="1">
-                <label for="rate1">1</label>
-                <input type="radio" id="rate2" name="rating" value="2">
-                <label for="rate2">2</label>
-                <input type="radio" id="rate3" name="rating" value="3">
-                <label for="rate3">3</label>
-                <input type="radio" id="rate4" name="rating" value="4">
-                <label for="rate4">4</label>
-                <input type="radio" id="rate5" name="rating" value="5">
-                <label for="rate5">5</label>
+            <div class="rating-section">
+                <span class="rating-label">Overall Rating</span>
+                <div class="rating-group">
+                    {% for i in range(1, 6) %}
+                        <input type="radio" name="overall_rating" value="{{ i }}" id="overall{{ i }}" required>
+                        <label for="overall{{ i }}">{{ i }}</label>
+                    {% endfor %}
+                </div>
+
+                <span class="rating-label">Fairness</span>
+                <div class="rating-group">
+                    {% for i in range(1, 6) %}
+                        <input type="radio" name="fairness" value="{{ i }}" id="fair{{ i }}" required>
+                        <label for="fair{{ i }}">{{ i }}</label>
+                    {% endfor %}
+                </div>
+
+                <span class="rating-label">Communication</span>
+                <div class="rating-group">
+                    {% for i in range(1, 6) %}
+                        <input type="radio" name="communication" value="{{ i }}" id="comm{{ i }}" required>
+                        <label for="comm{{ i }}">{{ i }}</label>
+                    {% endfor %}
+                </div>
+
+                <span class="rating-label">Technical Competence</span>
+                <div class="rating-group">
+                    {% for i in range(1, 6) %}
+                        <input type="radio" name="technical" value="{{ i }}" id="tech{{ i }}" required>
+                        <label for="tech{{ i }}">{{ i }}</label>
+                    {% endfor %}
+                </div>
             </div>
 
-            <textarea class="review-box" name="review" placeholder="Write your review here..." required></textarea>
-
-            <button type="submit" class="submit-btn">Submit</button>
+            <textarea name="review" class="review-box" placeholder="Write your review here..." required></textarea>
+            <button type="submit" class="submit-btn">Submit Review</button>
         </form>
     </div>
 </body>
