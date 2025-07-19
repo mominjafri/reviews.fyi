@@ -45,10 +45,28 @@ def write():
                 data["review"]
             )
 
+            success = add_review_to_sheet(
+                data["first_name"],
+                data["last_name"],
+                data["email"],
+                data["company"],
+                data["linkedin"],  # Will be empty string if not provided
+                data["rating"],
+                data["fairness"],
+                data["communication"],
+                data["technical"],
+                data["review"]
+            )
+
+        
             if success:
                 return redirect(url_for("thank_you"))
             else:
-                return "Failed to save review to Google Sheet", 500
+                return "Failed to save review - please try again later", 500
+            
+    except Exception as e:
+        print(f"Critical error: {str(e)}")
+        return "Internal server error", 500
 
         except KeyError as e:
             print(f"Missing required field: {e}")
