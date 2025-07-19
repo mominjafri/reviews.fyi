@@ -47,6 +47,14 @@
                         <label for="tech{{ i }}">{{ i }}</label>
                     {% endfor %}
                 </div>
+
+                <span class="rating-label">Leadership</span>
+                <div class="rating-group">
+                    {% for i in range(1, 6) %}
+                        <input type="radio" name="leadership" value="{{ i }}" id="lead{{ i }}" required>
+                        <label for="lead{{ i }}">{{ i }}</label>
+                    {% endfor %}
+                </div>
             </div>
 
             <textarea name="review" class="review-box" placeholder="Write your review here..." required></textarea>
