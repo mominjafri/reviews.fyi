@@ -4,37 +4,67 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 def connect_to_sheet():
+    """
+    Connect to Google Sheet with comprehensive error handling
+    Returns: gspread Worksheet object
+    Raises: Exception with detailed error message
+    """
     try:
-        # Get credentials from environment
-        creds_json = os.environ['GOOGLE_CREDENTIALS']
-        creds_dict = json.loads(creds_json)
+        # 1. Load credentials from environment
+        creds_json = os.environ.get('GOOGLE_CREDENTIALS')
+        if not creds_json:
+            raise ValueError("GOOGLE_CREDENTIALS environment variable not set")
         
-        # Fix private key formatting
+        # 2. Parse and validate credentials
+        creds_dict = json.loads(creds_json)
+        required_keys = ['type', 'project_id', 'private_key', 'client_email']
+        if not all(key in creds_dict for key in required_keys):
+            raise ValueError("Invalid Google credentials format")
+        
+        # 3. Fix private key formatting
         if '\\n' in creds_dict['private_key']:
             creds_dict['private_key'] = creds_dict['private_key'].replace('\\n', '\n')
         
-        scope = ['https://www.googleapis.com/auth/spreadsheets']
-        credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        # 4. Set authentication scopes
+        scopes = [
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/drive'
+        ]
+        
+        # 5. Authenticate
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scopes)
         client = gspread.authorize(credentials)
         
-        # Try to open the sheet
-        sheet = client.open("reviews-fyi").sheet1
-        print("Successfully connected to Google Sheet")
-        return sheet
+        # 6. Open specific sheet
+        sheet_name = os.environ.get('GOOGLE_SHEET_NAME', 'reviews-fyi')
+        return client.open(sheet_name).sheet1
         
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON in credentials: {str(e)}")
     except Exception as e:
-        print(f"Google Sheets connection failed: {str(e)}")
-        raise
+        raise Exception(f"Google Sheets connection failed: {repr(e)}")
 
 def add_review_to_sheet(first_name, last_name, email, company, linkedin,
-                      rating, fairness, communication, technical, review):
+                       rating, fairness, communication, technical, review):
+    """
+    Append review data to Google Sheet
+    Returns: bool (True if successful)
+    """
     try:
         sheet = connect_to_sheet()
-        row_data = [str(arg) if arg is not None else '' for arg in args]
-        print(f"Attempting to append: {row_data}")
-        sheet.append_row(row_data)
-        print("Successfully saved to sheet")
+        sheet.append_row([
+            first_name,
+            last_name,
+            email,
+            company,
+            linkedin if linkedin else '',  # Handle empty LinkedIn
+            rating,
+            fairness,
+            communication,
+            technical,
+            review
+        ])
         return True
     except Exception as e:
-        print(f"Failed to save to sheet: {str(e)}")
+        print(f"Failed to save review: {repr(e)}")
         return False
