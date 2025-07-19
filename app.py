@@ -63,6 +63,8 @@ def write():
                 return redirect(url_for("thank_you"))
             else:
                 return "Failed to save review - please try again later", 500
+        
+        return render_template("write.html")
             
     except Exception as e:
         print(f"Critical error: {str(e)}")
