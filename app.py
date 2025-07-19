@@ -14,69 +14,54 @@ def home():
 def write():
     if request.method == "POST":
         try:
-            # Get form data - LinkedIn is optional (default empty string)
-            data = {
-                "first_name": request.form["first_name"],  # Required fields
-                "last_name": request.form["last_name"],
-                "email": request.form["email"],
-                "company": request.form["company"],
-                "linkedin": request.form.get("linkedin", ""),  # Optional
-                "rating": request.form["overall_rating"],
-                "fairness": request.form["fairness"],
-                "communication": request.form["communication"],
-                "technical": request.form["technical"],
-                "review": request.form["review"]
-            }
-
-            # Debug print to verify data
-            print("Form data received:", data)
-
-            # Write to sheet
-            success = add_review_to_sheet(
-                data["first_name"],
-                data["last_name"],
-                data["email"],
-                data["company"],
-                data["linkedin"],  # Will be empty string if not provided
-                data["rating"],
-                data["fairness"],
-                data["communication"],
-                data["technical"],
-                data["review"]
-            )
-
-            success = add_review_to_sheet(
-                data["first_name"],
-                data["last_name"],
-                data["email"],
-                data["company"],
-                data["linkedin"],  # Will be empty string if not provided
-                data["rating"],
-                data["fairness"],
-                data["communication"],
-                data["technical"],
-                data["review"]
-            )
-
-        
-            if success:
+            # Get all form data with proper field names
+            first_name = request.form["first_name"]
+            last_name = request.form["last_name"]
+            email = request.form["email"]
+            company = request.form["company"]
+            linkedin = request.form.get("linkedin", "")  # Optional
+            
+            # Rating fields - must match your HTML name attributes
+            rating = request.form["overall_rating"]
+            fairness = request.form["fairness"]
+            communication = request.form["communication"]
+            technical = request.form["technical"]
+            
+            review = request.form["review"]
+            
+            # Print received data for debugging
+            print("Received data:", {
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": email,
+                "company": company,
+                "linkedin": linkedin,
+                "ratings": {
+                    "overall": rating,
+                    "fairness": fairness,
+                    "communication": communication,
+                    "technical": technical
+                },
+                "review": review
+            })
+            
+            # Save to sheet
+            if add_review_to_sheet(
+                first_name, last_name, email, company, linkedin,
+                rating, fairness, communication, technical, review
+            ):
                 return redirect(url_for("thank_you"))
             else:
-                return "Failed to save review - please try again later", 500
-        
-        return render_template("write.html")
-            
-    except Exception as e:
-        print(f"Critical error: {str(e)}")
-        return "Internal server error", 500
-
+                return "Failed to save review", 500
+                
         except KeyError as e:
-            print(f"Missing required field: {e}")
+            print(f"Missing field: {e}")
             return f"Missing required field: {e}", 400
         except Exception as e:
-            print(f"Unexpected error: {str(e)}")
-            return f"Internal Server Error: {str(e)}", 500
-
+            print(f"Error: {str(e)}")
+            return f"Server error: {str(e)}", 500
+    
+    # GET request - show the form
     return render_template("write.html")
 
 @app.route("/thank-you")
