@@ -16,12 +16,18 @@ def connect_to_sheet():
         get_google_credentials(), scope)
     client = gspread.authorize(credentials)
     return client.open("reviews-fyi").sheet1
-
-def add_review_to_sheet(*args):
+    
+def add_review_to_sheet(first_name, last_name, email, company, linkedin, 
+                       rating, fairness, communication, technical, review):
     try:
         sheet = connect_to_sheet()
-        sheet.append_row(list(args))
+        # Convert empty string to None if needed
+        linkedin = linkedin if linkedin else None
+        sheet.append_row([
+            first_name, last_name, email, company, linkedin,
+            rating, fairness, communication, technical, review
+        ])
         return True
     except Exception as e:
-        print(f"Error writing to sheet: {str(e)}")
+        print(f"Google Sheets Error: {str(e)}")
         return False
