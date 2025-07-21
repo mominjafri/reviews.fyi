@@ -84,7 +84,7 @@ main {
 
 .review-section {
     border-bottom: none;
-    padding-bottom: 0;
+    /* padding-bottom: 0; */
 }
 
 h3 {
@@ -146,6 +146,10 @@ input:focus {
 
 .rating-option {
     flex: 1;
+}
+
+.ratings-section {
+    border-bottom: none; /* Remove line below ratings */
 }
 
 .rating-option input[type="radio"] {
