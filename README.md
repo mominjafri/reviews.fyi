@@ -1,7 +1,7 @@
 # reviews.fyi 🚀
 
 Unmask your leadership.  
-**reviews.fyi** is a simple platform that lets tech professionals write honest reviews about their bosses, rate them from 1-5, and keep leadership accountable. Though it is a way from being live, you can run this application to see its early prototype stages.
+**reviews.fyi** is a simple platform that lets tech professionals write honest reviews about their bosses, rate them from 1-5, and keep leadership accountable. 
 
 ---
 
@@ -13,27 +13,10 @@ Unmask your leadership.
 
 ---
 
-## 🚀 How to run this locally
+## 🚀 See how our site is doing 
 
-**1. Clone the repo**
+[🔗 **Click Here**](https://reviews-fyi-fcd748fdb758.herokuapp.com/write)
 
-```bash
-git clone https://github.com/yourusername/reviews-fyi.git
-cd reviews-fyi
 
-```
-
-**2. Install Flask**
- 
-```bash
-pip install -r requirements.txt
-
-```
-
-**3. Run via localhost**
-```bash
-flask run
-
-```
 
 
