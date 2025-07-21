@@ -2,64 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Write a Review</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Review - reviews.fyi</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Write a Review</h1>
-        <form method="POST" action="/write">  <!-- Changed from /submit to /write -->
-            <input type="text" name="first_name" placeholder="First Name" required>
-            <input type="text" name="last_name" placeholder="Last Name" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="text" name="company" placeholder="Company" required>
-            <input type="url" name="linkedin" placeholder="LinkedIn Profile (URL)">
+        <header>
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
+                <h1>reviews.fyi</h1>
+            </div>
+        </header>
 
-            <div class="rating-section">
-                <span class="rating-label">Overall Rating</span>
-                <div class="rating-group">
-                    {% for i in range(1, 6) %}
-                        <input type="radio" name="overall_rating" value="{{ i }}" id="overall{{ i }}" required>
-                        <label for="overall{{ i }}">{{ i }}</label>
-                    {% endfor %}
-                </div>
-
-                <span class="rating-label">Fairness</span>
-                <div class="rating-group">
-                    {% for i in range(1, 6) %}
-                        <input type="radio" name="fairness" value="{{ i }}" id="fair{{ i }}" required>
-                        <label for="fair{{ i }}">{{ i }}</label>
-                    {% endfor %}
-                </div>
-
-                <span class="rating-label">Communication</span>
-                <div class="rating-group">
-                    {% for i in range(1, 6) %}
-                        <input type="radio" name="communication" value="{{ i }}" id="comm{{ i }}" required>
-                        <label for="comm{{ i }}">{{ i }}</label>
-                    {% endfor %}
-                </div>
-
-                <span class="rating-label">Technical Competence</span>
-                <div class="rating-group">
-                    {% for i in range(1, 6) %}
-                        <input type="radio" name="technical" value="{{ i }}" id="tech{{ i }}" required>
-                        <label for="tech{{ i }}">{{ i }}</label>
-                    {% endfor %}
-                </div>
-
-                <span class="rating-label">Leadership</span>
-                <div class="rating-group">
-                    {% for i in range(1, 6) %}
-                        <input type="radio" name="leadership" value="{{ i }}" id="lead{{ i }}" required>
-                        <label for="lead{{ i }}">{{ i }}</label>
-                    {% endfor %}
-                </div>
+        <main>
+            <div class="form-header">
+                <h2>Write a Review</h2>
             </div>
 
-            <textarea name="review" class="review-box" placeholder="Write your review here..." required></textarea>
-            <button type="submit" class="submit-btn">Submit Review</button>
-        </form>
+            <form method="POST" action="/submit">
+                <div class="personal-info-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" name="first_name" placeholder="First Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="last_name" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="company" placeholder="Company" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="url" name="linkedin" placeholder="LinkedIn Profile (URL - optional)">
+                    </div>
+                </div>
+
+                <div class="ratings-section">
+                    <h3>Rate Your Experience</h3>
+                    <div class="rating-category">
+                        <span class="rating-label">Overall Rating</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="overall_rating" value="{{ i }}" id="overall{{ i }}" required>
+                                <label for="overall{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Fairness</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="fairness" value="{{ i }}" id="fair{{ i }}" required>
+                                <label for="fair{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Communication</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="communication" value="{{ i }}" id="comm{{ i }}" required>
+                                <label for="comm{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Technical Competence</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="technical" value="{{ i }}" id="tech{{ i }}" required>
+                                <label for="tech{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-section">
+                    <h3>Your Review</h3>
+                    <textarea name="review" class="review-box" placeholder="Write your detailed review here..." required></textarea>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Review
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <nav>
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="#"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#"><i class="fas fa-lock"></i> Privacy</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+            </nav>
+            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
+        </footer>
     </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
