@@ -15,7 +15,7 @@ Unmask your leadership.
 
 ## 🚀 See how our site is doing 
 
-[🔗 **Click Here**](https://reviews-fyi-fcd748fdb758.herokuapp.com/write)
+[🔗 **Click Here**](https://reviews-fyi-fcd748fdb758.herokuapp.com/)
 
 
 
