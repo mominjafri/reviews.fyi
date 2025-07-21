@@ -29,3 +29,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Smooth page transition system
+function smoothTransition(url) {
+    // Add fade-out class to main content
+    document.querySelector('main').classList.add('fade-out');
+    
+    // After animation completes, navigate
+    setTimeout(() => {
+        window.location.href = url;
+    }, 300); // Match this duration to your CSS transition
+}
+
+// Attach to all internal links
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href^="/"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.href !== window.location.href) {
+                e.preventDefault();
+                smoothTransition(this.href);
+            }
+        });
+    });
+});
