@@ -3,87 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>reviews.fyi - Unmask Leadership</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <title>Write a Review - reviews.fyi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
             <div class="logo-container">
-                <img src="static/images/logo.png" alt="reviews.fyi logo" class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
                 <h1>reviews.fyi</h1>
             </div>
         </header>
 
         <main>
-            <section class="hero">
-                <div class="hero-content">
-                    <h2 class="animate__animated animate__fadeInDown">Unmask Leadership</h2>
-                    <p class="subtitle animate__animated animate__fadeInDown animate__delay-1s">Real Reviews. Real Bosses. Real Impact.</p>
-                    
-                    <div class="mission-box animate__animated animate__fadeInUp animate__delay-2s">
-                        <blockquote>
-                            "Our mission is to empower tech professionals by fostering transparency and accountability in leadership, helping everyone make informed decisions about where – and with whom – they work."
-                        </blockquote>
-                        <p class="signature">- CEO Haaris Khan</p>
+            <div class="form-header">
+                <h2>Write a Review</h2>
+            </div>
+
+            <form method="POST" action="/thank-you">
+                <div class="personal-info-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" name="first_name" placeholder="First Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="last_name" placeholder="Last Name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="company" placeholder="Company" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="url" name="linkedin" placeholder="LinkedIn Profile (URL - optional)">
                     </div>
                 </div>
-                
-                <div class="illustration animate__animated animate__fadeInRight animate__delay-3s">
-                    <img src="static/images/team-illustration.png" alt="Team illustration" class="team-img">
+
+                <div class="ratings-section">
+                    <h3>Rate Your Experience</h3>
+                    <div class="rating-category">
+                        <span class="rating-label">Overall Rating</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="overall_rating" value="{{ i }}" id="overall{{ i }}" required>
+                                <label for="overall{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Fairness</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="fairness" value="{{ i }}" id="fair{{ i }}" required>
+                                <label for="fair{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Communication</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="communication" value="{{ i }}" id="comm{{ i }}" required>
+                                <label for="comm{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Technical Competence</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="technical" value="{{ i }}" id="tech{{ i }}" required>
+                                <label for="tech{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            </section>
 
-            <div class="divider"></div>
-
-            <section class="actions animate__animated animate__fadeInUp animate__delay-4s">
-                <a href="/write" class="action-btn">
-                    <img src="static/images/write_icon.png" alt="Write icon" class="action-icon">
-                    Write a Review
-                </a>
-                <a href="#" class="action-btn">
-                    <img src="static/images/search_icon.png" alt="Search icon" class="action-icon">
-                    Search Reviews
-                </a>
-            </section>
-
-            <section class="security-section animate__animated animate__fadeInUp animate__delay-5s">
-                <h3>Security & Compliance</h3>
-                <ul class="security-list">
-                    <li><strong>RANK 235.127</strong></li>
-                    <li><strong>Others joined the lifetime program</strong></li>
-                    <li>Upon launch of web, teleport on page and return access to our apps as well as online services agreements.</li>
-                </ul>
-                <a href="#" class="cta-link">Try it for free →</a>
-            </section>
-
-            <div class="rating-display animate__animated animate__fadeIn animate__delay-6s">
-                <span class="rating-value">4.5</span>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+                <div class="review-section">
+                    <h3>Your Review</h3>
+                    <textarea name="review" class="review-box" placeholder="Write your detailed review here..." required></textarea>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Review
+                    </button>
                 </div>
-            </div>
+            </form>
         </main>
 
         <footer>
             <nav>
+                <a href="/"><i class="fas fa-home"></i> Home</a>
                 <a href="#"><i class="fas fa-info-circle"></i> About</a>
                 <a href="#"><i class="fas fa-lock"></i> Privacy</a>
-                <a href="#"><i class="fas fa-user-plus"></i> Submit Employee</a>
                 <a href="#"><i class="fas fa-envelope"></i> Contact</a>
             </nav>
             <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
         </footer>
     </div>
 
-    <!-- Load Font Awesome for footer icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
