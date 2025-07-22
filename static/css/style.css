@@ -16,13 +16,18 @@
 }
 
 /* Base Styles */
+html {
+    scroll-behavior: smooth;
+    transition: background-color 0.3s ease;
+}
+
 body {
+    margin: 0;
+    padding: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     line-height: 1.6;
     color: var(--text-dark);
     background-color: var(--light-gray);
-    margin: 0;
-    padding: 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -42,6 +47,8 @@ body {
     flex-direction: column;
     margin: 0 auto;
     transition: background-color 0.3s ease;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 /* Header Styles */
@@ -93,7 +100,7 @@ h1 {
     width: 100%;
     max-width: 800px;
     margin: 2rem auto;
-    padding: 0 20px;
+    padding: 0 10px;
     box-sizing: border-box;
 }
 
@@ -110,6 +117,7 @@ h2 {
     color: var(--dark-blue);
     margin-bottom: 0.5rem;
     transition: color 0.3s ease;
+    line-height: 1.2;
 }
 
 .dark-mode h2 {
@@ -133,8 +141,9 @@ h2 {
     display: flex;
     gap: 1.5rem;
     margin-bottom: 3rem;
-    flex-wrap: wrap;
     justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .action-btn {
@@ -149,6 +158,9 @@ h2 {
     transition: all 0.3s ease;
     min-width: 200px;
     text-align: center;
+    min-height: 48px;
+    box-sizing: border-box;
+    white-space: nowrap;
 }
 
 .search-btn {
@@ -176,6 +188,7 @@ h2 {
     padding: 2rem;
     border-radius: 12px;
     color: white;
+    width: calc(100% - 40px);
     max-width: 800px;
     margin: 0 auto;
     transition: all 0.3s ease;
@@ -308,10 +321,15 @@ footer a:hover {
     display: none;
 }
 
-/* Responsive Design */
+/* Responsive Design - Mobile First Approach */
 @media (max-width: 768px) {
-    .hero {
+    .container {
         padding: 0 15px;
+    }
+    
+    .hero {
+        padding: 0 10px;
+        margin: 1.5rem auto;
     }
     
     h2 {
@@ -320,26 +338,45 @@ footer a:hover {
     
     .subtitle {
         font-size: 1.1rem;
+        margin-bottom: 1.5rem;
     }
     
     .action-buttons {
         flex-direction: column;
+        align-items: center;
         gap: 1rem;
+        margin-bottom: 2rem;
     }
     
     .action-btn {
         width: 100%;
+        max-width: 280px;
+        padding: 1rem;
     }
     
     .mission-box {
+        width: calc(100% - 30px);
         padding: 1.5rem;
+    }
+    
+    .mission-box blockquote {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .divider {
+        margin: 2rem auto;
+        width: 90%;
     }
 }
 
 @media (max-width: 480px) {
-    .dark-mode-toggle {
-        top: 15px;
-        right: 15px;
+    header {
+        padding: 1rem 0;
+    }
+    
+    .logo {
+        height: 35px;
     }
     
     h1 {
@@ -348,5 +385,18 @@ footer a:hover {
     
     h2 {
         font-size: 1.8rem;
+    }
+    
+    .dark-mode-toggle {
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .action-btn {
+        min-width: auto;
+        width: 100%;
     }
 }
