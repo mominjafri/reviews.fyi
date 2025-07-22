@@ -149,23 +149,6 @@
             <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
         </footer>
     </div>
-
-    <script>
-        const toggle = document.getElementById('darkModeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        // Set initial mode
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (localStorage.getItem('darkMode') === null && prefersDark)) {
-            document.documentElement.classList.add('dark-mode');
-        }
-        
-        // Toggle function
-        toggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
-        });
-    </script>
     
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
