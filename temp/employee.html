@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lebron Olajuwon - reviews.fyi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="employee-style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="reviews.fyi" class="logo">
+                <h1>reviews.fyi</h1>
+            </div>
+        </header>
+
+        <main>
+            <div class="employee-header">
+                <div class="employee-left">
+                    <div class="employee-photo">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h2 class="employee-name">Lebron Olajuwon</h2>
+                    <div class="employee-company">Amazon</div>
+                    <div class="employee-location">
+                        <i class="fas fa-map-marker-alt"></i> Seattle, WA
+                    </div>
+                    <div class="overall-rating">
+                        <span class="overall-score">4.2</span>
+                        <span class="overall-stars">★★★★☆</span>
+                    </div>
+                </div>
+                
+                <div class="employee-right">
+                    <div class="rating-bars">
+                        <div class="rating-bar">
+                            <span class="rating-label">Fairness</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 75%"></div>
+                            </div>
+                            <span class="rating-value">3.8</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">Communication</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 82%"></div>
+                            </div>
+                            <span class="rating-value">4.1</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">Technical</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 92%"></div>
+                            </div>
+                            <span class="rating-value">4.6</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">Leadership</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 68%"></div>
+                            </div>
+                            <span class="rating-value">3.4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rest of your content (reviews, etc.) remains the same -->
+            <hr class="divider">
+
+            <div class="review-card">
+                <div class="review-meta">
+                    <span>★★★★★</span>
+                    <span>3 months ago</span>
+                </div>
+                <div class="review-content">
+                    Lebron truly knows product inside out and pushes the team to think bigger. I've grown a ton under his leadership. That said, his expectations can be intense, and sometimes work-life balance takes a hit. Great mentor if you're hungry, but maybe not for everyone.
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-meta">
+                    <span>★★★☆☆</span>
+                    <span>1 year ago</span>
+                </div>
+                <div class="review-content">
+                    No doubt Lebron is sharp — he has a knack for strategy and closing big deals. But in my year here, I rarely felt heard. Feedback sessions felt one-sided, and there's little patience for mistakes. Learned a lot, but ultimately decided it wasn't the healthiest environment for me.
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <nav class="footer-nav">
+                <a href="/about">About</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/submit">Submit Employee</a>
+                <a href="/contact">Contact</a>
+            </nav>
+            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // This would be populated from your database in a real implementation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example data - replace with actual API call
+            const employeeData = {
+                name: "Lebron Olajuwon",
+                company: "Amazon",
+                location: "Seattle, WA",
+                overallRating: 4.2,
+                ratings: {
+                    fairness: 3.8,
+                    communication: 4.1,
+                    technical: 4.6,
+                    leadership: 3.4
+                }
+            };
+
+            // Calculate bar widths
+            document.querySelector('.bar-fill:nth-child(1)').style.width = `${(employeeData.ratings.fairness / 5) * 100}%`;
+            document.querySelector('.bar-fill:nth-child(2)').style.width = `${(employeeData.ratings.communication / 5) * 100}%`;
+            // ...and so on for other ratings
+        });
+    </script>
+</body>
+</html>
