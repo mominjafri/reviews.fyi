@@ -52,3 +52,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Dark mode toggle functionality
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const htmlElement = document.documentElement;
+    
+    // Check for saved user preference
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode === 'dark') {
+        htmlElement.classList.add('dark-mode');
+    } else if (savedMode === 'light') {
+        htmlElement.classList.remove('dark-mode');
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // Default to system preference
+        htmlElement.classList.add('dark-mode');
+    }
+    
+    // Toggle dark mode
+    darkModeToggle.addEventListener('click', function() {
+        htmlElement.classList.toggle('dark-mode');
+        
+        // Save user preference
+        const isDark = htmlElement.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
+    });
+    
+    // Watch for system preference changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (localStorage.getItem('darkMode') === null) {
+            htmlElement.classList.toggle('dark-mode', e.matches);
+        }
+    });
+});

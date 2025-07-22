@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <title>reviews.fyi - Unmask Leadership</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<div class="page-transition">
-    <div class="loader">
-        <div class="loader-spinner"></div>
-    </div>
-</div>
 <body>
     <div class="container">
+        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </button>
+
         <header>
             <div class="logo-container">
                 <img src="static/images/logo.png" alt="reviews.fyi logo" class="logo">
@@ -24,56 +25,32 @@
 
         <main>
             <section class="hero">
-                <div class="hero-content">
-                    <h2 class="animate__animated animate__fadeInDown">Unmask Leadership</h2>
-                    <p class="subtitle animate__animated animate__fadeInDown animate__delay-1s">Real Reviews. Real Bosses. Real Impact.</p>
+                <div class="hero-left">
+                    <h2>Unmask Leadership</h2>
+                    <p class="subtitle">Real Reviews. Real Bosses. Real Impact.</p>
                     
-                    <div class="mission-box animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="mission-box">
                         <blockquote>
                             "Our mission is to empower tech professionals by fostering transparency and accountability in leadership, helping everyone make informed decisions about where – and with whom – they work."
                         </blockquote>
-                        <p class="signature">- CEO Haaris Khan</p>
+                        <p class="signature">- CEO Nida Jafri Khan</p>
                     </div>
                 </div>
                 
-                <div class="illustration animate__animated animate__fadeInRight animate__delay-3s">
-                    <img src="static/images/team-illustration.png" alt="Team illustration" class="team-img">
+                <div class="hero-right">
+                    <div class="action-buttons">
+                        <a href="/search" class="action-btn search-btn">
+                            <i class="fas fa-search"></i> Search Bosses
+                        </a>
+                        <a href="/write" class="action-btn write-btn">
+                            <i class="fas fa-pen"></i> Write Review
+                        </a>
+                    </div>
                 </div>
             </section>
 
             <div class="divider"></div>
 
-            <section class="actions animate__animated animate__fadeInUp animate__delay-4s">
-                <a href="/write" class="action-btn" data-transition="smooth">
-                    <img src="static/images/write_icon.png" alt="Write icon" class="action-icon">
-                    Write a Review
-                </a>
-                <a href="https://docs.google.com/spreadsheets/d/1JiPmfKrThIrKHq1k3532j3Sx5wCTUi5M6EiYojgZPao/edit?usp=sharing" class="action-btn">
-                    <img src="static/images/search_icon.png" alt="Search icon" class="action-icon">
-                    Search Reviews
-                </a>
-            </section>
-
-            <section class="security-section animate__animated animate__fadeInUp animate__delay-5s">
-                <h3>Security & Compliance</h3>
-                <ul class="security-list">
-                    <li><strong>RANK 235.127</strong></li>
-                    <li><strong>Others joined the lifetime program</strong></li>
-                    <li>Upon launch of web, teleport on page and return access to our apps as well as online services agreements.</li>
-                </ul>
-                <a href="#" class="cta-link">Try it for free →</a>
-            </section>
-
-            <div class="rating-display animate__animated animate__fadeIn animate__delay-6s">
-                <span class="rating-value">4.5</span>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-            </div>
         </main>
 
         <footer>
@@ -87,8 +64,21 @@
         </footer>
     </div>
 
-    <!-- Load Font Awesome for footer icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Set initial mode
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (localStorage.getItem('darkMode') === null && prefersDark)) {
+            document.documentElement.classList.add('dark-mode');
+        }
+        
+        // Toggle function
+        toggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+        });
+    </script>
 </body>
 </html>

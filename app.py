@@ -10,6 +10,14 @@ app = Flask(__name__)
 def home():
     return render_template("index.html")
 
+@app.route("/search")
+def search():
+    return render_template("search.html")
+
+@app.route("/write-existing")
+def write_existing():
+    return render_template("write-existing.html")
+
 @app.route("/write", methods=["GET", "POST"])
 def write():
     if request.method == "POST":
@@ -19,7 +27,10 @@ def write():
             last_name = request.form["last_name"]
             email = request.form["email"]
             company = request.form["company"]
+            role = request.form["role"]
+            years_experience = request.form["years_experience"]
             linkedin = request.form.get("linkedin", "")  # Optional
+
             
             # Rating fields - must match your HTML name attributes
             rating = request.form["overall_rating"]
@@ -36,6 +47,8 @@ def write():
                 "last_name": last_name,
                 "email": email,
                 "company": company,
+                "role": role,
+                "years_experience": years_experience,
                 "linkedin": linkedin,
                 "ratings": {
                     "overall": rating,
@@ -49,7 +62,7 @@ def write():
             
             # Save to sheet
             if add_review_to_sheet(
-                first_name, last_name, email, company, linkedin,
+                first_name, last_name, email, company, role, years_experience,linkedin,
                 rating, fairness, communication, technical, leadership, review
             ):
                 return redirect(url_for("thank_you"))

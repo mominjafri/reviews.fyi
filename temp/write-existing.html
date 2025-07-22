@@ -3,19 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <title>Write a Review - reviews.fyi</title>
+    <title>Write Anonymous Review - reviews.fyi</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Additional styles for anonymous version */
+        .profile-display {
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .profile-pic i {
+            font-size: 2.5rem;
+            color: var(--primary-purple);
+        }
+        
+        .profile-name {
+            font-size: 1.5rem;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-company {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-location {
+            color: var(--primary-purple);
+            font-weight: 500;
+        }
+        
+        /* Adjust form header spacing */
+        .form-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Hide personal info section */
+        .personal-info-section {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
-            <i class="fas fa-sun"></i>
-        </button>
-
         <header>
             <div class="logo-container">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
@@ -25,47 +73,23 @@
 
         <main>
             <div class="form-header">
-                <h2>Write a Review</h2>
+                <h2>Write Anonymous Review</h2>
+                <p>Your personal information won't be collected</p>
             </div>
 
-            <form method="POST" action="/write">
-                <div class="personal-info-section">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" name="first_name" placeholder="First Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="last_name" placeholder="Last Name" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Work Email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="company" placeholder="Company" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" name="role" placeholder="Role (e.g. Engineering Manager)" required>
-                        </div>
-                        <div class="form-group">
-                            <select name="years_experience" required>
-                                <option value="" disabled selected>Years of Experience</option>
-                                <option value="less than 1">Less than 1</option>
-                                <option value="1-3">1-3</option>
-                                <option value="3-5">3-5</option>
-                                <option value="5-10">5-10</option>
-                                <option value="10+">10+</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="url" name="linkedin" placeholder="LinkedIn Profile (URL - optional)">
-                    </div>
+            <!-- Profile Display Section -->
+            <div class="profile-display">
+                <div class="profile-pic">
+                    <i class="fas fa-user"></i>
                 </div>
+                <h3 class="profile-name">John Doe</h3>
+                <div class="profile-company">Amazon</div>
+                <div class="profile-location">
+                    <i class="fas fa-map-marker-alt"></i> Seattle, WA
+                </div>
+            </div>
 
+            <form method="POST" action="/write-anonymous">
                 <div class="ratings-section">
                     <h3>Rate Your Experience</h3>
                     <div class="rating-category">
@@ -150,23 +174,20 @@
         </footer>
     </div>
 
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
-        const toggle = document.getElementById('darkModeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        // Set initial mode
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (localStorage.getItem('darkMode') === null && prefersDark)) {
-            document.documentElement.classList.add('dark-mode');
-        }
-        
-        // Toggle function
-        toggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+        // This would be populated from your backend in a real implementation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example: Fetch employee data to display
+            // fetch('/api/employee/123')
+            //   .then(response => response.json())
+            //   .then(data => {
+            //       document.querySelector('.profile-name').textContent = data.name;
+            //       document.querySelector('.profile-company').textContent = data.company;
+            //       document.querySelector('.profile-location').innerHTML = 
+            //         `<i class="fas fa-map-marker-alt"></i> ${data.location}`;
+            //   });
         });
     </script>
-    
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
