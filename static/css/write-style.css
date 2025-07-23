@@ -488,3 +488,49 @@ footer a:hover {
         right: 15px;
     }
 }
+
+/* Employee Info Display */
+.employee-info-section {
+    background-color: var(--light-gray);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.employee-display {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.employee-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-purple);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.employee-details h3 {
+    margin: 0 0 0.25rem 0;
+    color: var(--dark-blue);
+}
+
+.company, .location {
+    margin: 0.25rem 0;
+    color: var(--text-dark);
+}
+
+.years-worked {
+    margin-top: 1.5rem;
+}
+
+.years-worked select {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+}

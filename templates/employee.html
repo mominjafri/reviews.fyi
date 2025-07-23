@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>{{ employee.first_name }} {{ employee.last_name }} - reviews.fyi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/employee-style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </button>
+
+        <header>
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi" class="logo">
+                <h1>reviews.fyi</h1>
+            </div>
+        </header>
+
+        <main>
+            <div class="employee-header">
+                <div class="employee-left">
+                    <div class="employee-photo">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h2 class="employee-name">{{ employee.first_name }} {{ employee.last_name }}</h2>
+                    <div class="employee-company">{{ employee.company }}</div>
+                    <div class="employee-location">
+                        <i class="fas fa-map-marker-alt"></i> 
+                        {{ employee.location if employee.location else 'Location not specified' }}
+                    </div>
+                    {% if avg_ratings.overall %}
+                    <div class="overall-rating">
+                        <span class="overall-score">{{ "%.1f"|format(avg_ratings.overall) }}</span>
+                        <span class="overall-stars">
+                            {% for i in range(5) %}
+                                {% if i < avg_ratings.overall|round %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if avg_ratings %}
+                <div class="employee-right">
+                    <div class="rating-bars">
+                        <div class="rating-bar">
+                            <span class="rating-label">Fairness</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: {{ (avg_ratings.fairness / 5) * 100 }}%"></div>
+                            </div>
+                            <span class="rating-value">{{ "%.1f"|format(avg_ratings.fairness) }}</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">Communication</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: {{ (avg_ratings.communication / 5) * 100 }}%"></div>
+                            </div>
+                            <span class="rating-value">{{ "%.1f"|format(avg_ratings.communication) }}</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">Respect</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: {{ (avg_ratings.respect / 5) * 100 }}%"></div>
+                            </div>
+                            <span class="rating-value">{{ "%.1f"|format(avg_ratings.respect) }}</span>
+                        </div>
+                        <div class="rating-bar">
+                            <span class="rating-label">Leadership</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: {{ (avg_ratings.leadership / 5) * 100 }}%"></div>
+                            </div>
+                            <span class="rating-value">{{ "%.1f"|format(avg_ratings.leadership) }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <hr class="divider">
+
+            <div class="write-review-section">
+                <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-review-btn">
+                    <i class="fas fa-pen"></i> Write a Review
+                </a>
+            </div>
+
+            <div class="reviews-container">
+                {% if reviews %}
+                    {% for review in reviews %}
+                    <div class="review-card">
+                        <div class="review-meta">
+                            <span class="review-stars">
+                                {% for i in range(5) %}
+                                    {% if i < review.overall_rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="review-date">{{ review.created_at.strftime('%B %d, %Y') }}</span>
+                        </div>
+                        <div class="review-content">
+                            {{ review.review_text }}
+                        </div>
+                        {% if review.fairness_rating or review.communication_rating or review.respect_rating %}
+                        <div class="review-ratings">
+                            {% if review.fairness_rating %}
+                            <span class="mini-rating">
+                                <span>Fairness:</span>
+                                {{ review.fairness_rating }}/5
+                            </span>
+                            {% endif %}
+                            {% if review.communication_rating %}
+                            <span class="mini-rating">
+                                <span>Communication:</span>
+                                {{ review.communication_rating }}/5
+                            </span>
+                            {% endif %}
+                            {% if review.respect_rating %}
+                            <span class="mini-rating">
+                                <span>Respect:</span>
+                                {{ review.respect_rating }}/5
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-reviews">
+                        <p>No reviews yet for this employee.</p>
+                        <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-first-review">
+                            Be the first to review
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer>
+            <nav class="footer-nav">
+                <a href="/about">About</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/submit">Submit Employee</a>
+                <a href="/contact">Contact</a>
+            </nav>
+            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        const toggle = document.getElementById('darkModeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (localStorage.getItem('darkMode') === null && prefersDark)) {
+            document.documentElement.classList.add('dark-mode');
+        }
+        
+        toggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+        });
+    </script>
+</body>
+</html>
