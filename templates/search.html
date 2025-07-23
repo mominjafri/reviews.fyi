@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <title>Search - reviews.fyi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,6 +11,11 @@
 </head>
 <body>
     <div class="container">
+        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </button>
+
         <header>
             <div class="logo-container">
                 <img src="static/images/logo.png" alt="reviews.fyi logo" class="logo">
@@ -77,6 +83,22 @@
     </div>
 
     <script>
+        // Dark mode toggle functionality
+        const toggle = document.getElementById('darkModeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Set initial mode
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (localStorage.getItem('darkMode') === null && prefersDark)) {
+            document.documentElement.classList.add('dark-mode');
+        }
+        
+        // Toggle function
+        toggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+        });
+
         // Sample boss database
         const bossDatabase = [
             { name: "John Smith", company: "TechCorp", location: "San Francisco" },
