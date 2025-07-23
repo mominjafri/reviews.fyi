@@ -119,6 +119,8 @@ h2 {
 /* Search Form */
 .search-form {
     margin-bottom: 2rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .requirements {
@@ -145,6 +147,8 @@ h2 {
 
 .form-group {
     margin-bottom: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-group label {
@@ -154,8 +158,9 @@ h2 {
 }
 
 .form-group input {
-    width: 100%;
+    width: calc(100% - 2.4rem);
     padding: 0.9rem 1.2rem;
+    box-sizing: border-box;
     border: 1px solid var(--medium-gray);
     border-radius: 8px;
     font-size: 1rem;
@@ -208,6 +213,9 @@ h2 {
 /* Results Table */
 .results-table {
     width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    display: block;
     border-collapse: collapse;
     margin-top: 1.5rem;
 }

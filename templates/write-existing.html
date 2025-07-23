@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Write a Review - reviews.fyi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </button>
+
+        <header>
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
+                <h1>reviews.fyi</h1>
+            </div>
+        </header>
+
+        <main>
+            <div class="form-header">
+                <h2>Write a Review for {{ employee.first_name }} {{ employee.last_name }}</h2>
+            </div>
+
+            <form method="POST" action="/submit-review">
+                <!-- Hidden fields for employee data -->
+                <input type="hidden" name="employee_id" value="{{ employee.id }}">
+                <input type="hidden" name="first_name" value="{{ employee.first_name }}">
+                <input type="hidden" name="last_name" value="{{ employee.last_name }}">
+                <input type="hidden" name="company" value="{{ employee.company }}">
+                
+                <!-- Employee Info Display Section -->
+                <div class="employee-info-section">
+                    <div class="employee-display">
+                        <div class="employee-photo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="employee-details">
+                            <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
+                            <p class="company">{{ employee.company }}</p>
+                            {% if employee.location %}
+                            <p class="location"><i class="fas fa-map-marker-alt"></i> {{ employee.location }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Only editable field in this section -->
+                    <div class="form-group years-worked">
+                        <select name="years_experience" required>
+                            <option value="" disabled selected>Years worked with this person</option>
+                            <option value="less than 1">Less than 1</option>
+                            <option value="1-3">1-3</option>
+                            <option value="3-5">3-5</option>
+                            <option value="5-10">5-10</option>
+                            <option value="10+">10+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Ratings Section (unchanged) -->
+                <div class="ratings-section">
+                    <h3>Rate Your Experience</h3>
+                    <div class="rating-category">
+                        <span class="rating-label">Overall Rating</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="overall_rating" value="{{ i }}" id="overall{{ i }}" required>
+                                <label for="overall{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Fairness</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="fairness" value="{{ i }}" id="fair{{ i }}" required>
+                                <label for="fair{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Communication</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="communication" value="{{ i }}" id="comm{{ i }}" required>
+                                <label for="comm{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Technical Competence</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="technical" value="{{ i }}" id="tech{{ i }}" required>
+                                <label for="tech{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="rating-category">
+                        <span class="rating-label">Leadership</span>
+                        <div class="rating-group">
+                            {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" name="leadership" value="{{ i }}" id="lead{{ i }}" required>
+                                <label for="lead{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Section (unchanged) -->
+                <div class="review-section">
+                    <h3>Your Review</h3>
+                    <textarea name="review" class="review-box" placeholder="Write your detailed review here..." required></textarea>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> Submit Review
+                    </button>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <nav>
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="#"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#"><i class="fas fa-lock"></i> Privacy</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+            </nav>
+            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (localStorage.getItem('darkMode') === null && prefersDark)) {
+            document.documentElement.classList.add('dark-mode');
+        }
+        
+        toggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+        });
+    </script>
+</body>
+</html>
