@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - reviews.fyi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search-style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="static/images/logo.png" alt="reviews.fyi logo" class="logo">
+                <h1>reviews.fyi</h1>
+            </div>
+        </header>
+
+        <main>
+            <h2>Search Your Boss</h2>
+            
+            <div class="requirements">
+                <h3>Required</h3>
+                <ul>
+                    <li>Company name</li>
+                    <li>Employee Name</li>
+                    <li>Location (City, Zip) - Optional</li>
+                </ul>
+            </div>
+
+            <form class="search-form">
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" placeholder="Enter company name" required>
+                </div>
+                <div class="form-group">
+                    <label for="employee">Employee Name</label>
+                    <input type="text" id="employee" placeholder="Enter employee name" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location (Optional)</label>
+                    <input type="text" id="location" placeholder="City or Zip code">
+                </div>
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+
+            <div class="results" id="resultsSection">
+                <table class="results-table" id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Company</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <!-- Results will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                <div id="noResults" class="no-results" style="display: none;">
+                    No results found
+                    <a href="/write" class="add-boss-link">Add your boss's first review</a>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <nav>
+                <a href="/about">About</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/submit">Submit Employee</a>
+                <a href="/contact">Contact</a>
+            </nav>
+            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sample boss database
+        const bossDatabase = [
+            { name: "John Smith", company: "TechCorp", location: "San Francisco" },
+            { name: "Sarah Johnson", company: "DataSystems", location: "New York" },
+            { name: "Michael Brown", company: "TechCorp", location: "Austin" },
+            { name: "Emily Davis", company: "CloudNine", location: "Chicago" },
+            { name: "Robert Wilson", company: "DataSystems", location: "Boston" },
+            { name: "Jennifer Lee", company: "WebSolutions", location: "Seattle" },
+            { name: "David Miller", company: "TechCorp", location: "San Francisco" },
+            { name: "Jessica Taylor", company: "CloudNine", location: "Chicago" },
+            { name: "Lebron Olajuwon", company: "Amazon", location: "Seattle" },
+            { name: "Lisa Anderson", company: "WebSolutions", location: "Portland" }
+        ];
+
+        document.querySelector('.search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get search values
+            const companySearch = document.getElementById('company').value.toLowerCase();
+            const employeeSearch = document.getElementById('employee').value.toLowerCase();
+            const locationSearch = document.getElementById('location').value.toLowerCase();
+            
+            // Filter the database
+            const results = bossDatabase.filter(boss => {
+                const matchesCompany = boss.company.toLowerCase().includes(companySearch);
+                const matchesEmployee = boss.name.toLowerCase().includes(employeeSearch);
+                const matchesLocation = locationSearch === '' || 
+                                      (boss.location && boss.location.toLowerCase().includes(locationSearch));
+                
+                return matchesCompany && matchesEmployee && matchesLocation;
+            });
+            
+            // Display results
+            displayResults(results);
+            
+            // Scroll to results
+            document.getElementById('resultsSection').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+        
+        function displayResults(results) {
+            const resultsBody = document.getElementById('resultsBody');
+            const noResultsDiv = document.getElementById('noResults');
+            const resultsTable = document.getElementById('resultsTable');
+            
+            // Clear previous results
+            resultsBody.innerHTML = '';
+            
+            if (results.length > 0) {
+                // Show table and hide "no results" message
+                resultsTable.style.display = '';
+                noResultsDiv.style.display = 'none';
+                
+                // Add matching results to the table
+                results.forEach(boss => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${boss.name}</td>
+                        <td>${boss.company}</td>
+                        <td>${boss.location || 'N/A'}</td>
+                    `;
+                    resultsBody.appendChild(row);
+                });
+            } else {
+                // Show "no results" message and hide table
+                resultsTable.style.display = 'none';
+                noResultsDiv.style.display = 'block';
+            }
+            
+            // Show results section
+            document.getElementById('resultsSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -66,6 +66,10 @@ def write():
     # GET request - show the form
     return render_template("write.html")
 
+@app.route("/search")
+def search():
+    return render_template("search.html")
+
 @app.route("/thank-you")
 def thank_you():
     return render_template("submit.html")
