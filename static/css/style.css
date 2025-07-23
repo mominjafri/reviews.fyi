@@ -182,23 +182,19 @@ h2 {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Mission Box */
-.mission-box {
-    background-color: var(--primary-purple);
-    padding: 2rem;
-    border-radius: 12px;
-    color: white;
-    width: calc(100% - 40px);
+.mission-text {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin: 2rem auto;
     max-width: 800px;
-    margin: 0 auto;
+    padding: 0 20px;
     transition: all 0.3s ease;
 }
 
-.mission-box blockquote {
-    font-style: italic;
-    margin: 0;
-    font-size: 1.1rem;
-    line-height: 1.7;
+.dark-mode .mission-text {
+    color: var(--text-light);
 }
 
 .signature {
@@ -353,15 +349,37 @@ footer a:hover {
         max-width: 280px;
         padding: 1rem;
     }
-    
-    .mission-box {
-        width: calc(100% - 30px);
-        padding: 1.5rem;
+
+    .mission-text {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: var(--text-dark);
+        margin: 2rem auto;
+        max-width: 800px;
+        padding: 0 20px;
+        transition: all 0.3s ease;
     }
     
-    .mission-box blockquote {
-        font-size: 1rem;
-        line-height: 1.6;
+    .dark-mode .mission-text {
+        color: var(--text-light);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .mission-text {
+            font-size: 1.1rem;
+            margin: 1.5rem auto;
+        }
+    
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .mission-box {
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            width: calc(100% - 30px);
+        }
     }
     
     .divider {

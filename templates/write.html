@@ -32,10 +32,10 @@
                 <div class="personal-info-section">
                     <div class="form-row">
                         <div class="form-group">
-                            <input type="text" name="first_name" placeholder="First Name" required>
+                            <input type="text" name="first_name" placeholder="Boss First Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="last_name" placeholder="Last Name" required>
+                            <input type="text" name="last_name" placeholder="Boss Last Name" required>
                         </div>
                     </div>
                     <div class="form-row">
@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group">
                             <select name="years_experience" required>
-                                <option value="" disabled selected>Years of Experience</option>
+                                <option value="" disabled selected>Years worked with</option>
                                 <option value="less than 1">Less than 1</option>
                                 <option value="1-3">1-3</option>
                                 <option value="3-5">3-5</option>
@@ -148,7 +148,25 @@
             </nav>
             <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
         </footer>
+ 
     </div>
+
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Set initial mode
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (localStorage.getItem('darkMode') === null && prefersDark)) {
+            document.documentElement.classList.add('dark-mode');
+        }
+        
+        // Toggle function
+        toggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+        });
+    </script>
     
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
