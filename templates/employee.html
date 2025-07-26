@@ -69,11 +69,11 @@
                             <span class="rating-value">{{ "%.1f"|format(avg_ratings.communication) }}</span>
                         </div>
                         <div class="rating-bar">
-                            <span class="rating-label">Respect</span>
+                            <span class="rating-label">Technical</span>
                             <div class="bar-container">
-                                <div class="bar-fill" style="width: {{ (avg_ratings.respect / 5) * 100 }}%"></div>
+                                <div class="bar-fill" style="width: {{ (avg_ratings.technical / 5) * 100 }}%"></div>
                             </div>
-                            <span class="rating-value">{{ "%.1f"|format(avg_ratings.respect) }}</span>
+                            <span class="rating-value">{{ "%.1f"|format(avg_ratings.technical) }}</span>
                         </div>
                         <div class="rating-bar">
                             <span class="rating-label">Leadership</span>
@@ -90,11 +90,13 @@
             <hr class="divider">
 
             <div class="write-review-section">
-                <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-review-btn">
-                    <i class="fas fa-pen"></i> Write a Review
-                </a>
+                {% if employee %}
+                    <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-review-btn">
+                        <i class="fas fa-pen"></i> Write a Review
+                    </a>
+                {% endif %}
             </div>
-
+            
             <div class="reviews-container">
                 {% if reviews %}
                     {% for review in reviews %}
@@ -128,10 +130,16 @@
                                 {{ review.communication_rating }}/5
                             </span>
                             {% endif %}
-                            {% if review.respect_rating %}
+                            {% if review.technical_rating %}
                             <span class="mini-rating">
-                                <span>Respect:</span>
-                                {{ review.respect_rating }}/5
+                                <span>Technical:</span>
+                                {{ review.technical_rating }}/5
+                            </span>
+                            {% endif %}
+                            {% if review.leadership_rating %}
+                            <span class="mini-rating">
+                                <span>Leadership:</span>
+                                {{ review.leadership_rating }}/5
                             </span>
                             {% endif %}
                         </div>
@@ -139,12 +147,14 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <div class="no-reviews">
-                        <p>No reviews yet for this employee.</p>
+                <div class="no-reviews">
+                    <p>No reviews yet for this employee.</p>
+                    {% if employee %}
                         <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-first-review">
                             Be the first to review
                         </a>
-                    </div>
+                    {% endif %}
+                </div>    
                 {% endif %}
             </div>
         </main>

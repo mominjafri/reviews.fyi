@@ -17,9 +17,10 @@ db.init_app(app)
 def home():
     return render_template("index.html")
 
-@app.route('/write-existing')
-def existing():
-    return render_template("write-existing.html")
+@app.route('/write-existing/<int:employee_id>')
+def write_existing(employee_id):
+    employee = Employee.query.get_or_404(employee_id)
+    return render_template("write-existing.html", employee=employee)
 
 @app.route('/write', methods=['GET', 'POST'])
 def write():
@@ -44,11 +45,12 @@ def write():
         # Create review
         review = Review(
             employee_id=employee.id,
+            years_experience=request.form['years_experience'],
             overall_rating=request.form['overall_rating'],
-            fairness_rating=request.form['fairness'],
-            communication_rating=request.form['communication'],
-            technical_rating=request.form['technical'],
-            leadership_rating=request.form['leadership'],
+            fairness_rating=request.form['fairness'],  # Changed from fairness
+            communication_rating=request.form['communication'],  # Changed from communication
+            technical_rating=request.form['technical'],  # Changed from technical
+            leadership_rating=request.form['leadership'],  # Changed from leadership
             review_text=request.form['review']
         )
         db.session.add(review)
