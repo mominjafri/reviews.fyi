@@ -78,7 +78,6 @@ def employee(employee_id):
                          employee=employee, 
                          reviews=reviews,
                          avg_ratings=avg_ratings)
-
 # Add these imports at the top
 from models import db, Employee, Review
 from sqlalchemy import or_
@@ -159,6 +158,17 @@ def submit_review():
     db.session.commit()
     
     return redirect(url_for('employee', employee_id=employee.id))
+
+
+@app.route('/vote/<int:review_id>/<vote_type>', methods=['POST'])
+def vote(review_id, vote_type):
+    review = Review.query.get_or_404(review_id)
+    if vote_type == 'up':
+        review.upvotes += 1
+    elif vote_type == 'down':
+        review.downvotes += 1
+    db.session.commit()
+    return redirect(url_for('employee', employee_id=review.employee_id))
 
 
 @app.route("/thank-you")

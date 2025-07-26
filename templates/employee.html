@@ -51,7 +51,6 @@
                     {% endif %}
                 </div>
                 
-                {% if avg_ratings %}
                 <div class="employee-right">
                     <div class="rating-bars">
                         <div class="rating-bar">
@@ -84,25 +83,20 @@
                         </div>
                     </div>
                 </div>
-                {% endif %}
             </div>
 
-            <hr class="divider">
-
             <div class="write-review-section">
-                {% if employee %}
-                    <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-review-btn">
-                        <i class="fas fa-pen"></i> Write a Review
-                    </a>
-                {% endif %}
+                <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-review-btn">
+                    <i class="fas fa-pen"></i> Write a Review
+                </a>
             </div>
             
             <div class="reviews-container">
                 {% if reviews %}
                     {% for review in reviews %}
                     <div class="review-card">
-                        <div class="review-meta">
-                            <span class="review-stars">
+                        <div class="review-header">
+                            <div class="review-rating">
                                 {% for i in range(5) %}
                                     {% if i < review.overall_rating %}
                                         <i class="fas fa-star"></i>
@@ -110,51 +104,35 @@
                                         <i class="far fa-star"></i>
                                     {% endif %}
                                 {% endfor %}
-                            </span>
+                            </div>
                             <span class="review-date">{{ review.created_at.strftime('%B %d, %Y') }}</span>
                         </div>
+                        
                         <div class="review-content">
                             {{ review.review_text }}
                         </div>
-                        {% if review.fairness_rating or review.communication_rating or review.respect_rating %}
-                        <div class="review-ratings">
-                            {% if review.fairness_rating %}
-                            <span class="mini-rating">
-                                <span>Fairness:</span>
-                                {{ review.fairness_rating }}/5
-                            </span>
-                            {% endif %}
-                            {% if review.communication_rating %}
-                            <span class="mini-rating">
-                                <span>Communication:</span>
-                                {{ review.communication_rating }}/5
-                            </span>
-                            {% endif %}
-                            {% if review.technical_rating %}
-                            <span class="mini-rating">
-                                <span>Technical:</span>
-                                {{ review.technical_rating }}/5
-                            </span>
-                            {% endif %}
-                            {% if review.leadership_rating %}
-                            <span class="mini-rating">
-                                <span>Leadership:</span>
-                                {{ review.leadership_rating }}/5
-                            </span>
-                            {% endif %}
+                        
+                        <div class="review-votes">
+                            <form method="POST" action="{{ url_for('vote', review_id=review.id, vote_type='up') }}">
+                                <button type="submit" class="vote-btn upvote">
+                                    <i class="fas fa-thumbs-up"></i> {{ review.upvotes }}
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ url_for('vote', review_id=review.id, vote_type='down') }}">
+                                <button type="submit" class="vote-btn downvote">
+                                    <i class="fas fa-thumbs-down"></i> {{ review.downvotes }}
+                                </button>
+                            </form>
                         </div>
-                        {% endif %}
                     </div>
                     {% endfor %}
                 {% else %}
-                <div class="no-reviews">
-                    <p>No reviews yet for this employee.</p>
-                    {% if employee %}
+                    <div class="no-reviews">
+                        <p>No reviews yet for this employee.</p>
                         <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="write-first-review">
                             Be the first to review
                         </a>
-                    {% endif %}
-                </div>    
+                    </div>    
                 {% endif %}
             </div>
         </main>

@@ -8,6 +8,7 @@
     --text-dark: #333333;
     --star-active: #FFD700;
     --star-inactive: #e9ecef;
+    --card-bg: var(--white);
 }
 
 body {
@@ -61,20 +62,20 @@ h1 {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     display: flex;
     gap: 2rem;
-    align-items: center; /* This ensures both sides are vertically centered */
-    min-height: 300px; /* Gives consistent height for centering */
+    align-items: center;
 }
 
 .employee-left {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .employee-right {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers content vertically */
-    height: 100%; /* Takes full height of parent */
+    justify-content: center;
 }
 
 .employee-photo {
@@ -134,33 +135,23 @@ h1 {
     font-size: 1.5rem;
 }
 
-.rating-bars-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-}
-
 .rating-bars {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem; /* Slightly more spacing */
-    width: 100%;
+    gap: 1.25rem;
 }
 
 .rating-bar {
     display: flex;
     align-items: center;
     gap: 1rem;
-    width: 100%;
 }
 
-
-
 .rating-label {
-    width: 120px;
+    width: 110px;
     font-weight: 600;
     color: var(--dark-blue);
+    font-size: 0.95rem;
 }
 
 .bar-container {
@@ -182,6 +173,8 @@ h1 {
     width: 40px;
     text-align: right;
     font-weight: 600;
+    color: var(--dark-blue);
+    font-size: 0.95rem;
 }
 
 /* Review Content Styles */
@@ -193,11 +186,18 @@ hr.divider {
 }
 
 .review-card {
-    background-color: var(--white);
+    background-color: var(--card-bg);
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 .review-meta {
@@ -210,6 +210,34 @@ hr.divider {
 
 .review-content {
     line-height: 1.7;
+}
+
+.review-rating {
+    color: var(--star-active);
+}
+
+.review-votes {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.vote-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.upvote {
+    color: #4CAF50;
+}
+
+.downvote {
+    color: #F44336;
 }
 
 /* Footer Styles */
@@ -242,6 +270,44 @@ footer {
     text-align: center;
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+    --text-dark: #f0f0f0;
+    --light-gray: #1a1a1a;
+    --medium-gray: #2d2d2d;
+    --white: #2a2a2a;
+    --card-bg: #2a2a2a;
+    --star-inactive: #444;
+}
+
+.dark-mode .employee-header,
+.dark-mode .review-card {
+    background-color: var(--white);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .employee-photo {
+    background-color: var(--medium-gray);
+}
+
+.dark-mode .employee-photo i {
+    color: var(--light-purple);
+}
+
+.dark-mode .rating-label,
+.dark-mode .rating-value,
+.dark-mode .review-meta {
+    color: #e0e0e0;
+}
+
+.dark-mode .bar-container {
+    background-color: #3a3a3a;
+}
+
+.dark-mode .vote-btn:hover {
+    background: #333;
 }
 
 /* Responsive Design */

@@ -27,3 +27,6 @@ class Review(db.Model):
     leadership_rating = db.Column(db.Integer)
     review_text = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    upvotes = db.Column(db.Integer, default=0)
+    downvotes = db.Column(db.Integer, default=0)
+    
