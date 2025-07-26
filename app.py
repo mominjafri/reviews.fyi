@@ -1,11 +1,14 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()  # Initialize SQLAlchemy here (no app passed)
+from extensions import db
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reviews.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+if 'sqlite' in app.config['SQLALCHEMY_DATABASE_URI']:
+    raise ValueError("Use PostgreSQL, not SQLite!")
 
 # Initialize db with app
 db.init_app(app)
@@ -115,6 +118,45 @@ def search_employees(company=None, name=None, location=None):
         query = query.filter(Employee.location.ilike(f'%{location}%'))
     
     return query.order_by(Employee.last_name, Employee.first_name).limit(50).all()
+
+
+@app.route('/submit-review', methods=['POST'])
+def submit_review():
+    # Get form data
+    data = request.form
+    
+    # Create or find employee
+    employee = Employee.query.filter_by(
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        company=data['company']
+    ).first()
+    
+    if not employee:
+        employee = Employee(
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            company=data['company'],
+            location=data.get('location'),
+            linkedin=data.get('linkedin')
+        )
+        db.session.add(employee)
+    
+    # Create review
+    review = Review(
+        employee=employee,  # This sets the foreign key
+        years_experience=data['years_experience'],
+        overall_rating=data['overall_rating'],
+        fairness_rating=data.get('fairness'),
+        communication_rating=data.get('communication'),
+        technical_rating=data.get('technical'),
+        leadership_rating=data.get('leadership'),
+        review_text=data['review']
+    )
+    db.session.add(review)
+    db.session.commit()
+    
+    return redirect(url_for('employee', employee_id=employee.id))
 
 
 @app.route("/thank-you")
