@@ -1,17 +1,34 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from extensions import db
 import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key')
 
 if 'sqlite' in app.config['SQLALCHEMY_DATABASE_URI']:
     raise ValueError("Use PostgreSQL, not SQLite!")
 
 # Initialize db with app
 db.init_app(app)
+
+@app.context_processor
+def inject_now():
+    return {'now': datetime.utcnow()}
+
+@app.context_processor
+def inject_dark_mode():
+    dark_mode = session.get('dark_mode', False)
+    return {'dark_mode': dark_mode}
+
+# Dark mode toggle route
+@app.route('/toggle-dark-mode')
+def toggle_dark_mode():
+    session['dark_mode'] = not session.get('dark_mode', False)
+    return redirect(request.referrer or url_for('home'))
 
 @app.route("/")
 def home():
@@ -24,6 +41,13 @@ def write_existing(employee_id):
 
 @app.route('/write', methods=['GET', 'POST'])
 def write():
+    # Get search parameters if they exist (for pre-filling the form)
+    first_name = request.args.get('first_name', '')
+    last_name = request.args.get('last_name', '')
+    company = request.args.get('company', '')
+    location = request.args.get('location', '')
+    linkedin = request.args.get('linkedin', '')
+
     if request.method == 'POST':
         # Create or find employee
         employee = Employee.query.filter_by(
@@ -37,6 +61,7 @@ def write():
                 first_name=request.form['first_name'],
                 last_name=request.form['last_name'],
                 company=request.form['company'],
+                location=request.form.get('location'),
                 linkedin=request.form.get('linkedin')
             )
             db.session.add(employee)
@@ -47,10 +72,10 @@ def write():
             employee_id=employee.id,
             years_experience=request.form['years_experience'],
             overall_rating=request.form['overall_rating'],
-            fairness_rating=request.form['fairness'],  # Changed from fairness
-            communication_rating=request.form['communication'],  # Changed from communication
-            technical_rating=request.form['technical'],  # Changed from technical
-            leadership_rating=request.form['leadership'],  # Changed from leadership
+            fairness_rating=request.form.get('fairness', 0),  # Default to 0 if not provided
+            communication_rating=request.form.get('communication', 0),
+            technical_rating=request.form.get('technical', 0),
+            leadership_rating=request.form.get('leadership', 0),
             review_text=request.form['review']
         )
         db.session.add(review)
@@ -58,7 +83,13 @@ def write():
 
         return redirect(url_for('employee', employee_id=employee.id))
     
-    return render_template('write.html')
+    # For GET requests, render the form with pre-filled values if available
+    return render_template('write.html',
+                         first_name=first_name,
+                         last_name=last_name,
+                         company=company,
+                         location=location,
+                         linkedin=linkedin)
 
 @app.route('/employee/<int:employee_id>')
 def employee(employee_id):
@@ -86,17 +117,39 @@ from sqlalchemy import or_
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
+        first_name = request.form.get('first_name', '').strip()
+        last_name = request.form.get('last_name', '').strip()
         company = request.form.get('company', '').strip()
-        employee_name = request.form.get('employee', '').strip()
         location = request.form.get('location', '').strip()
         
-        # Perform the search
-        results = search_employees(company, employee_name, location)
-        return render_template('search.html', results=results, 
-                             company=company, employee=employee_name, location=location)
+        # Search for employees with similar details
+        employees = search_employees(
+            company=company,
+            name=f"{first_name} {last_name}",
+            location=location
+        )
+        
+        if employees:
+            # Found matching employees - show results
+            return render_template('search.html', 
+                                employees=employees,
+                                search_completed=True,
+                                first_name=first_name,
+                                last_name=last_name,
+                                company=company,
+                                location=location)
+        else:
+            # No matches found - show "not found" message with option to write review
+            return render_template('search.html',
+                                no_results=True,
+                                first_name=first_name,
+                                last_name=last_name,
+                                company=company,
+                                location=location,
+                                search_completed=True)
     
-    # GET request - show empty form
-    return render_template('search.html', results=None)
+    # For GET requests, show empty search form
+    return render_template('search.html', search_completed=False)
 
 # Add this helper function
 def search_employees(company=None, name=None, location=None):
@@ -138,14 +191,13 @@ def submit_review():
             first_name=data['first_name'],
             last_name=data['last_name'],
             company=data['company'],
-            location=data.get('location'),
-            linkedin=data.get('linkedin')
+            location=data.get('location')
         )
         db.session.add(employee)
     
     # Create review
     review = Review(
-        employee=employee,  # This sets the foreign key
+        employee_id=employee.id,
         years_experience=data['years_experience'],
         overall_rating=data['overall_rating'],
         fairness_rating=data.get('fairness'),

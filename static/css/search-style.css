@@ -198,9 +198,9 @@ h2 {
     transform: translateY(-2px);
 }
 
-/* Results Section */
+/* Results Section - UPDATED */
 .results {
-    display: none;
+    display: block;
     margin-top: 2rem;
     animation: fadeIn 0.3s ease-in-out;
 }
@@ -210,14 +210,21 @@ h2 {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Results Table */
+/* Results Table - UPDATED */
 .results-table {
     width: 100%;
-    max-width: 100%;
-    overflow: auto;
-    display: block;
     border-collapse: collapse;
     margin-top: 1.5rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.dark-mode .results-table {
+    background-color: var(--card-dark);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .results-table th {
@@ -225,16 +232,21 @@ h2 {
     color: var(--white);
     padding: 1rem;
     text-align: left;
+    font-weight: 600;
 }
 
 .results-table td {
     padding: 1rem;
     border-bottom: 1px solid var(--medium-gray);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .dark-mode .results-table td {
     border-bottom-color: var(--border-dark);
+}
+
+.results-table tr:last-child td {
+    border-bottom: none;
 }
 
 .results-table tr:hover {
@@ -243,6 +255,109 @@ h2 {
 
 .dark-mode .results-table tr:hover {
     background-color: var(--border-dark);
+}
+
+/* Action buttons */
+.results-table .btn-view,
+.results-table .btn-write {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 8px;
+    transition: all 0.2s ease;
+}
+
+.results-table .btn-view {
+    background-color: var(--primary-purple);
+    color: var(--white);
+}
+
+.results-table .btn-view:hover {
+    background-color: var(--light-purple);
+    transform: translateY(-1px);
+}
+
+.results-table .btn-write {
+    background-color: var(--medium-gray);
+    color: var(--text-dark);
+}
+
+.dark-mode .results-table .btn-write {
+    background-color: var(--border-dark);
+    color: var(--text-light);
+}
+
+.results-table .btn-write:hover {
+    background-color: var(--medium-gray);
+    filter: brightness(0.9);
+}
+
+.dark-mode .results-table .btn-write:hover {
+    background-color: var(--border-dark);
+    filter: brightness(1.2);
+}
+
+/* No results message - UPDATED */
+.no-results {
+    text-align: center;
+    padding: 2rem;
+    background: var(--white);
+    border-radius: 8px;
+    margin-top: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.dark-mode .no-results {
+    background-color: var(--card-dark);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.no-results h3 {
+    margin-top: 0;
+    color: var(--dark-blue);
+    font-size: 1.3rem;
+}
+
+.dark-mode .no-results h3 {
+    color: var(--text-light);
+}
+
+.no-results p {
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.dark-mode .no-results p {
+    color: var(--text-light);
+}
+
+.add-boss-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-purple);
+    color: var(--white);
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.add-boss-link:hover {
+    background-color: var(--light-purple);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.dark-mode .add-boss-link {
+    background-color: var(--light-purple);
+}
+
+.dark-mode .add-boss-link:hover {
+    background-color: var(--primary-purple);
 }
 
 /* Footer */
@@ -282,38 +397,6 @@ footer a:hover {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
     margin: 0;
-}
-
-/* Add Boss Link */
-.add-boss-link {
-    display: block;
-    text-align: center;
-    margin-top: 1.5rem;
-    color: var(--primary-purple);
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.dark-mode .add-boss-link {
-    color: var(--light-purple);
-}
-
-.add-boss-link:hover {
-    color: var(--light-purple);
-    text-decoration: underline;
-}
-
-.no-results {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-dark);
-    font-size: 1.1rem;
-    transition: color 0.3s ease;
-}
-
-.dark-mode .no-results {
-    color: var(--text-light);
 }
 
 /* Dark Mode Toggle */
@@ -383,5 +466,16 @@ footer a:hover {
     .dark-mode-toggle {
         top: 15px;
         right: 15px;
+    }
+
+    .results-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .results-table .btn-view,
+    .results-table .btn-write {
+        display: block;
+        margin-bottom: 8px;
     }
 }

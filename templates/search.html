@@ -3,132 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <title>Search - reviews.fyi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Search for a Boss</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/search-style.css') }}">
 </head>
 <body>
     <div class="container">
-        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
-            <i class="fas fa-sun"></i>
-        </button>
-
         <header>
             <div class="logo-container">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
-                <h1>reviews.fyi</h1>
+                <h1>Search for a Boss</h1>
             </div>
         </header>
 
         <main>
-            <h2>Search Your Boss</h2>
-            
-            <div class="requirements">
-                <h3>Required</h3>
-                <ul>
-                    <li>Company name</li>
-                    <li>Employee Name</li>
-                    <li>Location (City, Zip) - Optional</li>
-                </ul>
-            </div>
+            <form method="POST" action="{{ url_for('search') }}" class="search-form">
+                <div class="requirements">
+                    <h3>Search Requirements</h3>
+                    <p>Fill in at least first name, last name, and company to search</p>
+                </div>
 
-            <form class="search-form" method="POST" action="{{ url_for('search') }}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" value="{{ first_name or '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" value="{{ last_name or '' }}" required>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="company">Company</label>
-                    <input type="text" id="company" name="company" 
-                           placeholder="Enter company name" 
-                           value="{{ request.form.company if request.form }}" required>
+                    <input type="text" id="company" name="company" value="{{ company or '' }}" required>
                 </div>
-                <div class="form-group">
-                    <label for="employee">Employee Name</label>
-                    <input type="text" id="employee" name="employee"
-                           placeholder="Enter employee name"
-                           value="{{ request.form.employee if request.form }}" required>
-                </div>
+
                 <div class="form-group">
                     <label for="location">Location (Optional)</label>
-                    <input type="text" id="location" name="location"
-                           placeholder="City or Zip code"
-                           value="{{ request.form.location if request.form }}">
+                    <input type="text" id="location" name="location" value="{{ location or '' }}">
                 </div>
-                <button type="submit" class="search-btn">Search</button>
+
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i> Search
+                </button>
             </form>
 
-            <div class="results" id="resultsSection" style="display: {{ 'block' if request.method == 'POST' else 'none' }};">
-                {% if results %}
-                <table class="results-table" id="resultsTable">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Company</th>
-                            <th>Location</th>
-                            <th>Reviews</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultsBody">
-                        {% for employee in results %}
-                        <tr onclick="window.location.href='{{ url_for('employee', employee_id=employee.id) }}'"
-                            style="cursor: pointer;">
-                            <td>{{ employee.first_name }} {{ employee.last_name }}</td>
-                            <td>{{ employee.company }}</td>
-                            <td>{{ employee.location if employee.location else 'N/A' }}</td>
-                            <td>{{ employee.reviews|length }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% elif request.method == 'POST' %}
-                <div id="noResults" class="no-results">
-                    No results found
-                    <a href="{{ url_for('write') }}" class="add-boss-link">Add your boss's first review</a>
-                </div>
+            {% if search_completed %}
+                {% if no_results %}
+                    <div class="no-results">
+                        <h3>Boss not found</h3>
+                        <p>Be the first to review this boss!</p>
+                        <a href="{{ url_for('write', first_name=first_name, last_name=last_name, company=company, location=location) }}" 
+                           class="add-boss-link">
+                            <i class="fas fa-plus-circle"></i> Write First Review
+                        </a>
+                    </div>
+                {% elif employees %}
+                    <div class="results">
+                        <h2>Search Results</h2>
+                        <div class="results-table-container">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Company</th>
+                                        <th>Location</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for employee in employees %}
+                                        <tr>
+                                            <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                                            <td>{{ employee.company }}</td>
+                                            <td>{{ employee.location or 'N/A' }}</td>
+                                            <td>
+                                                <a href="{{ url_for('employee', employee_id=employee.id) }}" class="btn-view">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                                <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="btn-write">
+                                                    <i class="fas fa-pen"></i> Review
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 {% endif %}
-            </div>
+            {% endif %}
         </main>
-
-        <footer>
-            <nav>
-                <a href="/about">About</a>
-                <a href="/privacy">Privacy</a>
-                <a href="/submit">Submit Employee</a>
-                <a href="/contact">Contact</a>
-            </nav>
-            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
-        </footer>
     </div>
+
+    <footer>
+        <nav>
+            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a>
+            <a href="{{ url_for('search') }}"><i class="fas fa-search"></i> Search</a>
+            <a href="{{ url_for('write') }}"><i class="fas fa-pen"></i> Write Review</a>
+        </nav>
+        <p class="copyright">&copy; 2025 Boss Reviews. All rights reserved.</p>
+    </footer>
+
+    <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
 
     <script>
         // Dark mode toggle functionality
-        const toggle = document.getElementById('darkModeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        const html = document.documentElement;
         
-        // Set initial mode
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (localStorage.getItem('darkMode') === null && prefersDark)) {
-            document.documentElement.classList.add('dark-mode');
+        // Check for saved user preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            html.classList.add('dark-mode');
         }
         
-        // Toggle function
-        toggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark-mode');
+            
+            // Save user preference
+            if (html.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
         });
-
-        // Auto-focus on first input field
-        document.addEventListener('DOMContentLoaded', () => {
-            const firstInput = document.querySelector('input[type="text"]');
-            if (firstInput) firstInput.focus();
-        });
-
-        // Scroll to results if they exist
-        {% if request.method == 'POST' %}
-        document.getElementById('resultsSection').scrollIntoView({
-            behavior: 'smooth'
-        });
-        {% endif %}
     </script>
 </body>
 </html>
