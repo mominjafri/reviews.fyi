@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Companies - reviews.fyi{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/companies.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Companies</h1>
+            <p class="hero-subtitle">Browse companies to find and review their leaders</p>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🏢</div>
+                <div class="stat-value">{{ total_companies }}</div>
+                <div class="stat-label">Companies Listed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value">{{ total_leaders }}</div>
+                <div class="stat-label">Leaders Reviewed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value">{{ "%0.1f"|format((total_leaders/total_companies) if total_companies > 0 else 0) }}</div>
+                <div class="stat-label">Avg Leaders/Company</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Companies Section -->
+<section class="companies-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Featured Companies</h2>
+            <p class="section-subtitle">Find companies and explore their leadership teams</p>
+        </div>
+        
+        <div class="companies-grid">
+            {% for company in companies %}
+            <div class="company-card">
+                <div class="company-info">
+                    <h3 class="company-name">{{ company.company }}</h3>
+                    {% if company.location %}
+                    <p class="company-location">{{ company.location }}</p>
+                    {% endif %}
+                </div>
+                <div class="company-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Leaders:</span>
+                        <span class="stat-value">{{ company.review_count }} reviewed</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('search') }}?company={{ company.company|urlencode }}" class="btn btn-outline">
+                    View Leaders
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

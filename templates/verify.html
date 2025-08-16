@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Your Review{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav class="navbar">
+        <!-- Your existing navbar code from write.html -->
+    </nav>
+
+    <main>
+        <div class="form-header">
+            <h2>Verify Your Review</h2>
+            <p class="verification-notice">
+                Don't worry, your review will remain anonymous. This information is purely 
+                for verifying your review and will not be accessible by anyone outside of 
+                our moderating team.
+            </p>
+        </div>
+
+        <form method="POST" action="{{ url_for('submit_verification') }}">
+            <div class="verification-section">
+                <div class="form-group">
+                    <label for="email">Work Email (Optional)</label>
+                    <input type="email" id="email" name="email" placeholder="your.name@company.com">
+                    <p class="input-hint">We'll send a verification link to this address</p>
+                </div>
+                
+                <div class="divider">OR</div>
+                
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn Profile (Optional)</label>
+                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                    <p class="input-hint">Public profile URL only</p>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <p class="privacy-notice">
+                    <i class="fas fa-lock"></i> Your information will be kept confidential 
+                    and only used for verification purposes.
+                </p>
+                <button type="submit" class="btn btn--primary submit-btn">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <!-- Your existing footer code -->
+    </footer>
+</div>
+{% endblock %}

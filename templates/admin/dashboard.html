@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Review Moderation Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-6">Review Moderation Dashboard</h1>
+  
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h2 class="text-lg font-medium">Pending Reviews ({{ pending_reviews|length }})</h2>
+    </div>
+    
+    {% if pending_reviews %}
+      <ul class="divide-y divide-gray-200">
+        {% for review, employee in pending_reviews %}
+        <li class="px-6 py-4">
+          <div class="flex items-start justify-between">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center space-x-3">
+                <h3 class="text-lg font-medium text-gray-900">{{ employee.first_name }} {{ employee.last_name }}</h3>
+                <span class="text-sm text-gray-500">{{ employee.company }}</span>
+              </div>
+              <div class="mt-1">
+                <div class="flex items-center">
+                  {% for i in range(5) %}
+                    {% if i < review.overall_rating %}
+                      <span class="text-yellow-400">★</span>
+                    {% else %}
+                      <span class="text-gray-300">☆</span>
+                    {% endif %}
+                  {% endfor %}
+                  <span class="ml-2 text-sm text-gray-500">{{ review.overall_rating }}/5</span>
+                </div>
+              </div>
+              <p class="mt-2 text-sm text-gray-600">{{ review.review_text }}</p>
+              <p class="mt-2 text-xs text-gray-500">Submitted: {{ review.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+            <div class="ml-4 flex-shrink-0 flex space-x-2">
+              <form method="POST" action="{{ url_for('admin_review_action', review_id=review.id) }}">
+                <input type="hidden" name="action" value="approve">
+                <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none">
+                  Approve
+                </button>
+              </form>
+              <form method="POST" action="{{ url_for('admin_review_action', review_id=review.id) }}">
+                <input type="hidden" name="action" value="reject">
+                <button type="submit" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none">
+                  Reject
+                </button>
+              </form>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="px-6 py-12 text-center">
+        <p class="text-gray-500">No pending reviews to moderate</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

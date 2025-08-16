@@ -1,79 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <title>reviews.fyi - Unmask Leadership</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Rate Your Tech Boss{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
     <div class="container">
-        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
-            <i class="fas fa-sun"></i>
-        </button>
-
-        <header>
-            <div class="logo-container">
-                <img src="static/images/logo.png" alt="reviews.fyi logo" class="logo">
-                <h1>reviews.fyi</h1>
+        <div class="hero__content">
+            <h1 class="hero__title">Rate Your <span class="hero__highlight">Tech Boss</span></h1>
+            <p class="hero__subtitle">Share your experience working with tech leaders</p>
+            <div class="hero__buttons">
+                <a href="{{ url_for('search') }}" class="btn btn--primary">
+                    <i class="fas fa-search"></i> Find a Boss
+                </a>
+                <a href="{{ url_for('write') }}" class="btn btn--secondary">
+                    <i class="fas fa-pen"></i> Write Review
+                </a>
             </div>
-        </header>
-
-        <main>
-            <section class="hero">
-                <div class="hero-content">
-                    <h2>Unmask Leadership</h2>
-                    <p class="subtitle">Real Reviews. Real Bosses. Real Impact.</p>
-                    
-                    <div class="action-buttons">
-                        <a href="/search" class="action-btn search-btn">
-                            <i class="fas fa-search"></i> Search Bosses & Companies
-                        </a>
-                        <a href="/write" class="action-btn write-btn">
-                            <i class="fas fa-pen"></i> Write Anonymous Review
-                        </a>
-                    </div>
-                    
-                </div>
-            </section>
-
-            <div class="divider"></div>
-        </main>
-
-        
-        
-        <footer>
-            <nav>
-                <a href="#"><i class="fas fa-info-circle"></i> About</a>
-                <a href="#"><i class="fas fa-lock"></i> Privacy</a>
-                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
-            </nav>
-            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
-        </footer>
-
-
-
+        </div>
     </div>
+</section>
 
-    <script>
-        const toggle = document.getElementById('darkModeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+<section class="metrics">
+    <div class="container">
+        <!-- Main Stats Grid -->
+        <div class="metrics__grid">
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="user-check"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ total_bosses }}</h3>
+                    <p class="metric__label">Bosses Reviewed</p>
+                </div>
+            </div>
+            
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ total_reviews }}</h3>
+                    <p class="metric__label">Total Reviews</p>
+                </div>
+            </div>
+            
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="building"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ total_companies }}</h3>
+                    <p class="metric__label">Companies</p>
+                </div>
+            </div>
+            
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="badge-check"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ total_reviews }}</h3> <!-- Same as total reviews for 100% verified -->
+                    <p class="metric__label">Verified Reviews</p>
+                </div>
+            </div>
+        </div>
         
-        // Set initial mode
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (localStorage.getItem('darkMode') === null && prefersDark)) {
-            document.documentElement.classList.add('dark-mode');
-        }
-        
-        // Toggle function
-        toggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
-        });
-    </script>
-</body>
-</html>
+        <!-- Recently Reviewed Section -->
+        <div class="recently-reviewed">
+            <h2 class="section-title">Recently Reviewed Bosses</h2>
+            <div class="bosses-grid">
+                {% for employee, review in recent_bosses %}
+                <div class="boss-card">
+                    <div class="boss-avatar">
+                        <img src="{{ url_for('static', filename='images/avatar.png') }}" alt="{{ employee.first_name }} {{ employee.last_name }}">
+                    </div>
+                    <div class="boss-info">
+                        <h4>{{ employee.first_name }} {{ employee.last_name }}</h4>
+                        <p class="company">{{ employee.company }} • {{ employee.position or 'Leader' }}</p>
+                        <div class="rating">
+                            <div class="stars">
+                                {% for i in range(5) %}
+                                    {% if i < review.overall_rating|round|int %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span>{{ "%.1f"|format(review.overall_rating) }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="container">
+        <!-- Stats content -->
+    </div>
+</section>
+{% endblock %}

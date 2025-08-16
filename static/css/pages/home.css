@@ -1,0 +1,171 @@
+.hero {
+    background: linear-gradient(135deg, #1a4b8c, #0077FF);
+    color: white;
+    padding: var(--space-xl) 0;
+    text-align: center;
+}
+
+.hero__content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero__title {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+}
+
+.hero__highlight {
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero__buttons {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    margin-top: var(--space-lg);
+}
+
+.hero__buttons .btn {
+    min-width: 180px;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+}
+
+/* Metrics Section */
+.metrics {
+    padding: var(--space-xl) 0;
+    background: var(--color-bg);
+}
+
+.metrics__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.metric__card {
+    background: white;
+    border-radius: 12px;
+    padding: var(--space-lg);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.metric__card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.metric__icon {
+    width: 48px;
+    height: 48px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.metric__icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.metric__value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--space-xs);
+}
+
+.metric__label {
+    color: var(--color-text);
+    opacity: 0.8;
+    font-size: 0.95rem;
+}
+
+/* Recently Reviewed Section */
+.section-title {
+    text-align: center;
+    font-size: 1.75rem;
+    margin-bottom: var(--space-lg);
+    color: var(--color-text);
+}
+
+.bosses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-md);
+}
+
+.boss-card {
+    background: white;
+    border-radius: 8px;
+    padding: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.boss-avatar img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.boss-info h4 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-xs);
+}
+
+.company {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    opacity: 0.7;
+    margin-bottom: var(--space-xs);
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.stars {
+    color: #FFD700;
+    font-size: 0.9rem;
+}
+
+.rating span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .metrics__grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .bosses-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .metrics__grid {
+        grid-template-columns: 1fr;
+    }
+}

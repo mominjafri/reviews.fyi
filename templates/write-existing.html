@@ -1,34 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
-    <title>Write a Review - reviews.fyi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <div class="container">
-        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
-            <i class="fas fa-sun"></i>
-        </button>
+{% extends "base.html" %}
 
-        <header>
-            <div class="logo-container">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
-                <h1>reviews.fyi</h1>
-            </div>
-        </header>
+{% block title %}Write a Review for {{ employee.first_name }} {{ employee.last_name }} - reviews.fyi{% endblock %}
 
-        <main>
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <div class="content-grid">
+        <div class="form-container">
             <div class="form-header">
-                <h2>Write a Review for {{ employee.first_name }} {{ employee.last_name }}</h2>
+                <h1>Write a Review for {{ employee.first_name }} {{ employee.last_name }}</h1>
             </div>
 
-            <form method="POST" action="/submit-review">
+            <form method="POST" action="{{ url_for('submit_review') }}" id="reviewForm">
                 <!-- Hidden fields for employee data -->
                 <input type="hidden" name="employee_id" value="{{ employee.id }}">
                 <input type="hidden" name="first_name" value="{{ employee.first_name }}">
@@ -36,10 +22,13 @@
                 <input type="hidden" name="company" value="{{ employee.company }}">
                 
                 <!-- Employee Info Display Section -->
-                <div class="employee-info-section">
+                <div class="personal-info-section">
+                    <h2>About {{ employee.first_name }}</h2>
                     <div class="employee-display">
                         <div class="employee-photo">
-                            <i class="fas fa-user"></i>
+                            <span class="avatar-initials">
+                                {{ employee.first_name[0] }}{{ employee.last_name[0] }}
+                            </span>
                         </div>
                         <div class="employee-details">
                             <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
@@ -51,7 +40,7 @@
                     </div>
                     
                     <!-- Only editable field in this section -->
-                    <div class="form-group years-worked">
+                    <div class="form-group">
                         <select name="years_experience" required>
                             <option value="" disabled selected>Years worked with this person</option>
                             <option value="less than 1">Less than 1</option>
@@ -63,17 +52,18 @@
                     </div>
                 </div>
 
-                <!-- Ratings Section (unchanged) -->
-                <div class="ratings-section">
-                    <h3>Rate Your Experience</h3>
+                <!-- Ratings Section -->
+                <section class="ratings-section">
+                    <h2>Your Ratings</h2>
+
                     <div class="rating-category">
-                        <span class="rating-label">Overall Rating</span>
+                        <span class="rating-label">Overall</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="overall_rating" value="{{ i }}" id="overall{{ i }}" required>
-                                <label for="overall{{ i }}">{{ i }}</label>
-                            </div>
+                                <div class="rating-option">
+                                    <input type="radio" id="overall_rating_{{ i }}" name="overall_rating" value="{{ i }}" required>
+                                    <label for="overall_rating_{{ i }}">{{ i }}</label>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -82,10 +72,10 @@
                         <span class="rating-label">Fairness</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="fairness" value="{{ i }}" id="fair{{ i }}" required>
-                                <label for="fair{{ i }}">{{ i }}</label>
-                            </div>
+                                <div class="rating-option">
+                                    <input type="radio" id="fairness_{{ i }}" name="fairness" value="{{ i }}" required>
+                                    <label for="fairness_{{ i }}">{{ i }}</label>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -94,22 +84,22 @@
                         <span class="rating-label">Communication</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="communication" value="{{ i }}" id="comm{{ i }}" required>
-                                <label for="comm{{ i }}">{{ i }}</label>
-                            </div>
+                                <div class="rating-option">
+                                    <input type="radio" id="communication_{{ i }}" name="communication" value="{{ i }}" required>
+                                    <label for="communication_{{ i }}">{{ i }}</label>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
 
                     <div class="rating-category">
-                        <span class="rating-label">Technical Competence</span>
+                        <span class="rating-label">Technical Skills</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="technical" value="{{ i }}" id="tech{{ i }}" required>
-                                <label for="tech{{ i }}">{{ i }}</label>
-                            </div>
+                                <div class="rating-option">
+                                    <input type="radio" id="technical_{{ i }}" name="technical" value="{{ i }}" required>
+                                    <label for="technical_{{ i }}">{{ i }}</label>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -118,50 +108,26 @@
                         <span class="rating-label">Leadership</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="leadership" value="{{ i }}" id="lead{{ i }}" required>
-                                <label for="lead{{ i }}">{{ i }}</label>
-                            </div>
+                                <div class="rating-option">
+                                    <input type="radio" id="leadership_{{ i }}" name="leadership" value="{{ i }}" required>
+                                    <label for="leadership_{{ i }}">{{ i }}</label>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <!-- Review Section (unchanged) -->
-                <div class="review-section">
-                    <h3>Your Review</h3>
-                    <textarea name="review" class="review-box" placeholder="Write your detailed review here..." required></textarea>
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i> Submit Review
+                <!-- Review Section -->
+                <section class="review-section">
+                    <h2>Your Review</h2>
+                    <textarea class="review-box" id="review" name="review" placeholder="Share your detailed experience working with {{ employee.first_name }}..." required></textarea>
+                    
+                    <button type="submit" class="btn btn--primary submit-btn">
+                        <i class="fas fa-paper-plane"></i> Next
                     </button>
-                </div>
+                </section>
             </form>
-        </main>
-
-        <footer>
-            <nav>
-                <a href="/"><i class="fas fa-home"></i> Home</a>
-                <a href="#"><i class="fas fa-info-circle"></i> About</a>
-                <a href="#"><i class="fas fa-lock"></i> Privacy</a>
-                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
-            </nav>
-            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
-        </footer>
+        </div>
     </div>
-
-    <script>
-        const toggle = document.getElementById('darkModeToggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (localStorage.getItem('darkMode') === null && prefersDark)) {
-            document.documentElement.classList.add('dark-mode');
-        }
-        
-        toggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark-mode'));
-        });
-    </script>
-</body>
-</html>
+</div>
+{% endblock %}

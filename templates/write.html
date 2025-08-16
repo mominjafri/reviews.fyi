@@ -1,28 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Write a Review</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="logo-container">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
-                <h1>Write a Review</h1>
-            </div>
-        </header>
+{% extends "base.html" %}
 
-        <main>
+{% block title %}Write a Review - reviews.fyi{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <div class="content-grid">
+        <div class="form-container">
             <div class="form-header">
-                <h2>Share Your Experience</h2>
+                <h1>Share Your Experience</h1>
             </div>
 
-            <form method="POST" action="{{ url_for('write') }}">
+            <form method="POST" action="{{ url_for('submit_review') }}" id="reviewForm">
                 <div class="personal-info-section">
+                    <h2>About the Boss</h2>
                     <div class="form-row">
                         <div class="form-group">
                             <input type="text" name="first_name" placeholder="Boss First Name" value="{{ first_name or '' }}" required>
@@ -60,10 +54,10 @@
                 </div>
 
                 <section class="ratings-section">
-                    <h3>Your Ratings</h3>
+                    <h2>Your Ratings</h2>
 
                     <div class="rating-category">
-                        <span class="rating-label">Overall Rating</span>
+                        <span class="rating-label">Overall</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
                                 <div class="rating-option">
@@ -75,7 +69,7 @@
                     </div>
 
                     <div class="rating-category">
-                        <span class="rating-label">Fairness Rating (Optional)</span>
+                        <span class="rating-label">Fairness</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
                                 <div class="rating-option">
@@ -87,7 +81,7 @@
                     </div>
 
                     <div class="rating-category">
-                        <span class="rating-label">Communication Rating (Optional)</span>
+                        <span class="rating-label">Communication</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
                                 <div class="rating-option">
@@ -99,7 +93,7 @@
                     </div>
 
                     <div class="rating-category">
-                        <span class="rating-label">Technical Skills Rating (Optional)</span>
+                        <span class="rating-label">Technical Skills</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
                                 <div class="rating-option">
@@ -111,7 +105,7 @@
                     </div>
 
                     <div class="rating-category">
-                        <span class="rating-label">Leadership Rating (Optional)</span>
+                        <span class="rating-label">Leadership Rating</span>
                         <div class="rating-group">
                             {% for i in range(1, 6) %}
                                 <div class="rating-option">
@@ -124,51 +118,15 @@
                 </section>
 
                 <section class="review-section">
-                    <h3>Your Review</h3>
+                    <h2>Your Review</h2>
                     <textarea class="review-box" id="review" name="review" placeholder="Share your detailed experience working with this boss..." required></textarea>
                     
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i> Submit Review
+                    <button type="submit" class="btn btn--primary submit-btn">
+                        <i class="fas fa-paper-plane"></i> Next
                     </button>
                 </section>
             </form>
-        </main>
+        </div>
     </div>
-
-    <footer>
-        <nav>
-            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a>
-            <a href="{{ url_for('search') }}"><i class="fas fa-search"></i> Search</a>
-            <a href="{{ url_for('write') }}"><i class="fas fa-pen"></i> Write Review</a>
-        </nav>
-        <p class="copyright">&copy; 2023 Boss Reviews. All rights reserved.</p>
-    </footer>
-
-    <button class="dark-mode-toggle" aria-label="Toggle dark mode">
-        <i class="fas fa-moon"></i>
-        <i class="fas fa-sun"></i>
-    </button>
-
-    <script>
-        // Dark mode toggle functionality
-        const darkModeToggle = document.querySelector('.dark-mode-toggle');
-        const html = document.documentElement;
-        
-        // Check for saved user preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            html.classList.add('dark-mode');
-        }
-        
-        darkModeToggle.addEventListener('click', () => {
-            html.classList.toggle('dark-mode');
-            
-            // Save user preference
-            if (html.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
-            }
-        });
-    </script>
-</body>
-</html>
+</div>
+{% endblock %}

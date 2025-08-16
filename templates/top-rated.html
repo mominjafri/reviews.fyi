@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Top Rated Tech Leaders - reviews.fyi{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/top-rated.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero__content">
+            <h1 class="hero__title">Top Rated <span class="hero__highlight">Leaders</span></h1>
+            <p class="hero__subtitle">Explore the highest-rated corporate leaders based on peer reviews</p>
+        </div>
+    </div>
+</section>
+
+<section class="metrics">
+    <div class="container">
+        <div class="metrics__grid">
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="award"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ top_rated_count }}</h3>
+                    <p class="metric__label">Top Rated Leaders</p>
+                </div>
+            </div>
+            
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="star"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ avg_rating }}</h3>
+                    <p class="metric__label">Average Rating</p>
+                </div>
+            </div>
+            
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="users"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ reviewer_count }}</h3>
+                    <p class="metric__label">Reviewers</p>
+                </div>
+            </div>
+            
+            <div class="metric__card">
+                <div class="metric__icon">
+                    <i data-lucide="building"></i>
+                </div>
+                <div class="metric__content">
+                    <h3 class="metric__value">{{ company_count }}</h3>
+                    <p class="metric__label">Companies Represented</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="recently-reviewed">
+            <h2 class="section-title">Highest Rated Leaders</h2>
+            <div class="bosses-grid">
+                {% for leader in top_leaders %}
+                <div class="boss-card">
+                    <div class="boss-avatar">
+                        <img src="{{ url_for('static', filename='images/avatar.png') }}" alt="{{ leader.first_name }} {{ leader.last_name }}">
+                    </div>
+                    <div class="boss-info">
+                        <h4>{{ leader.first_name }} {{ leader.last_name }}</h4>
+                        <p class="company">{{ leader.company }} • {{ 'Leader' }}</p>
+                        <div class="rating">
+                            <div class="stars">
+                                {% for i in range(5) %}
+                                    {% if i < leader.avg_rating|round|int %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span>{{ "%.1f"|format(leader.avg_rating) }}</span>
+                            <span class="rating-count">• {{ leader.review_count }} reviews</span>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('employee', employee_id=leader.id) }}" class="btn btn-outline">Read Reviews</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

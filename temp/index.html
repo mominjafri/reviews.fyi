@@ -3,120 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Write a Review - reviews.fyi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/write-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>reviews.fyi - Rate Your Tech Boss</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo-container">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
-                <h1>reviews.fyi</h1>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-content">
+                <div class="nav-left">
+                    <div class="logo">
+                        <div class="logo-icon">★</div>
+                        <span class="logo-text">reviews.fyi</span>
+                    </div>
+                    <div class="nav-links">
+                        <a href="#" class="nav-link">📈 Top Rated</a>
+                        <a href="#" class="nav-link">👥 Companies</a>
+                        <a href="/search" class="nav-link">Search</a>
+                    </div>
+                </div>
+                <div class="nav-right">
+                    <button class="btn-outline">➕ Add Review</button>
+                    <button class="btn-primary">Sign In</button>
+                </div>
             </div>
-        </header>
+        </div>
+    </nav>
 
-        <main>
-            <div class="form-header">
-                <h2>Write a Review</h2>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container text-center">
+            <h1 class="hero-title">Unmask Leadership</h1>
+            <p class="hero-subtitle">
+                The transparent platform for reviewing engineering managers, VPs, and tech leaders. 
+                Help others make informed career decisions via anonymous reviews.
+            </p>
+            <div class="search-container">
+                <input type="text" placeholder="Search by name, company, or title..." class="search-input">
+                <button class="search-btn">🔍</button>
             </div>
+        </div>
+    </section>
 
-            <form method="POST" action="/thank-you">
-                <div class="personal-info-section">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" name="first_name" placeholder="First Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="last_name" placeholder="Last Name" required>
-                        </div>
+   
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="logo-icon">★</div>
+                        <span class="logo-text">reviews.fyi</span>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="company" placeholder="Company" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="url" name="linkedin" placeholder="LinkedIn Profile (URL - optional)">
-                    </div>
+                    <p>Transparent reviews of tech leaders to help you make informed career decisions.</p>
                 </div>
-
-                <div class="ratings-section">
-                    <h3>Rate Your Experience</h3>
-                    <div class="rating-category">
-                        <span class="rating-label">Overall Rating</span>
-                        <div class="rating-group">
-                            {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="overall_rating" value="{{ i }}" id="overall{{ i }}" required>
-                                <label for="overall{{ i }}">{{ i }}</label>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <div class="rating-category">
-                        <span class="rating-label">Fairness</span>
-                        <div class="rating-group">
-                            {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="fairness" value="{{ i }}" id="fair{{ i }}" required>
-                                <label for="fair{{ i }}">{{ i }}</label>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <div class="rating-category">
-                        <span class="rating-label">Communication</span>
-                        <div class="rating-group">
-                            {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="communication" value="{{ i }}" id="comm{{ i }}" required>
-                                <label for="comm{{ i }}">{{ i }}</label>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <div class="rating-category">
-                        <span class="rating-label">Technical Competence</span>
-                        <div class="rating-group">
-                            {% for i in range(1, 6) %}
-                            <div class="rating-option">
-                                <input type="radio" name="technical" value="{{ i }}" id="tech{{ i }}" required>
-                                <label for="tech{{ i }}">{{ i }}</label>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li>About Us</li>
+                        <li>Privacy Policy</li>
+                        <li>Terms of Service</li>
+                        <li>Contact</li>
+                    </ul>
                 </div>
-
-                <div class="review-section">
-                    <h3>Your Review</h3>
-                    <textarea name="review" class="review-box" placeholder="Write your detailed review here..." required></textarea>
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i> Submit Review
-                    </button>
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <ul>
+                        <li>Guidelines</li>
+                        <li>FAQ</li>
+                        <li>Support</li>
+                        <li>Report Content</li>
+                    </ul>
                 </div>
-            </form>
-        </main>
-
-        <footer>
-            <nav>
-                <a href="/"><i class="fas fa-home"></i> Home</a>
-                <a href="#"><i class="fas fa-info-circle"></i> About</a>
-                <a href="#"><i class="fas fa-lock"></i> Privacy</a>
-                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
-            </nav>
-            <p class="copyright">&copy; 2025 reviews.fyi. All rights reserved.</p>
-        </footer>
-    </div>
-
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 reviews.fyi. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

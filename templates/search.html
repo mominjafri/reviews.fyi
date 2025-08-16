@@ -1,53 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search for a Boss</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/search-style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Search Tech Bosses - reviews.fyi{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search-style.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="main">
     <div class="container">
-        <header>
-            <div class="logo-container">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="reviews.fyi logo" class="logo">
-                <h1>Search for a Boss</h1>
+        <div class="search-container">
+            <div class="title-section">
+                <h1 class="title">Search Tech Bosses</h1>
+                <p class="subtitle">Find reviews and ratings for technology leaders</p>
             </div>
-        </header>
 
-        <main>
-            <form method="POST" action="{{ url_for('search') }}" class="search-form">
-                <div class="requirements">
-                    <h3>Search Requirements</h3>
-                    <p>Fill in at least first name, last name, and company to search</p>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-search icon-lg"></i>
+                        Search Parameters
+                    </h2>
                 </div>
+                <div class="card-content">
+                    <form method="POST" action="{{ url_for('search') }}" class="form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="first_name" class="label">
+                                    <i class="fas fa-user icon"></i>
+                                    First Name *
+                                </label>
+                                <input type="text" id="first_name" name="first_name" value="{{ first_name or '' }}" placeholder="Enter first name" class="input" required>
+                                {% if errors and errors.first_name %}
+                                    <div class="error">{{ errors.first_name }}</div>
+                                {% endif %}
+                            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="first_name">First Name</label>
-                        <input type="text" id="first_name" name="first_name" value="{{ first_name or '' }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" value="{{ last_name or '' }}" required>
-                    </div>
+                            <div class="form-group">
+                                <label for="last_name" class="label">
+                                    <i class="fas fa-user icon"></i>
+                                    Last Name *
+                                </label>
+                                <input type="text" id="last_name" name="last_name" value="{{ last_name or '' }}" placeholder="Enter last name" class="input" required>
+                                {% if errors and errors.last_name %}
+                                    <div class="error">{{ errors.last_name }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company" class="label">
+                                <i class="fas fa-building icon"></i>
+                                Company *
+                            </label>
+                            <input type="text" id="company" name="company" value="{{ company or '' }}" placeholder="Enter company name" class="input" required>
+                            {% if errors and errors.company %}
+                                <div class="error">{{ errors.company }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location" class="label">
+                                <i class="fas fa-map-marker-alt icon"></i>
+                                Location <span class="optional">(optional)</span>
+                            </label>
+                            <input type="text" id="location" name="location" value="{{ location or '' }}" placeholder="Enter city, state, or country" class="input">
+                        </div>
+
+                        <button type="submit" class="btn btn--primary">
+                            <i class="fas fa-search icon-lg"></i>
+                            Search Reviews
+                        </button>
+                    </form>
                 </div>
-
-                <div class="form-group">
-                    <label for="company">Company</label>
-                    <input type="text" id="company" name="company" value="{{ company or '' }}" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="location">Location (Optional)</label>
-                    <input type="text" id="location" name="location" value="{{ location or '' }}">
-                </div>
-
-                <button type="submit" class="search-btn">
-                    <i class="fas fa-search"></i> Search
-                </button>
-            </form>
+            </div>
 
             {% if search_completed %}
                 {% if no_results %}
@@ -55,82 +81,83 @@
                         <h3>Boss not found</h3>
                         <p>Be the first to review this boss!</p>
                         <a href="{{ url_for('write', first_name=first_name, last_name=last_name, company=company, location=location) }}" 
-                           class="add-boss-link">
+                           class="btn btn--secondary" style="margin-top: 1rem;">
                             <i class="fas fa-plus-circle"></i> Write First Review
                         </a>
                     </div>
                 {% elif employees %}
-                    <div class="results">
-                        <h2>Search Results</h2>
-                        <div class="results-table-container">
-                            <table class="results-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Company</th>
-                                        <th>Location</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for employee in employees %}
-                                        <tr>
-                                            <td>{{ employee.first_name }} {{ employee.last_name }}</td>
-                                            <td>{{ employee.company }}</td>
-                                            <td>{{ employee.location or 'N/A' }}</td>
-                                            <td>
-                                                <a href="{{ url_for('employee', employee_id=employee.id) }}" class="btn-view">
-                                                    <i class="fas fa-eye"></i> View
-                                                </a>
-                                                <a href="{{ url_for('write_existing', employee_id=employee.id) }}" class="btn-write">
-                                                    <i class="fas fa-pen"></i> Review
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                    <div class="card results-card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-search icon-lg"></i>
+                                Search Results ({{ employees|length }})
+                            </h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="results-grid">
+                                {% for employee in employees %}
+                                    <a href="{{ url_for('employee', employee_id=employee.id) }}" class="result-item">
+                                        <div class="result-content">
+                                            <div class="result-info">
+                                                <h3 class="result-name">{{ employee.first_name }} {{ employee.last_name }}</h3>
+                                                <div class="result-details">
+                                                    <div class="result-detail">
+                                                        <i class="fas fa-building icon"></i>
+                                                        <span>{{ employee.company }}</span>
+                                                    </div>
+                                                    {% if employee.location %}
+                                                    <div class="result-detail">
+                                                        <i class="fas fa-map-marker-alt icon"></i>
+                                                        <span>{{ employee.location }}</span>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 {% endif %}
+            {% else %}
+                <div class="no-results">
+                    <p>Enter search criteria above to find tech boss reviews</p>
+                </div>
             {% endif %}
-        </main>
+        </div>
     </div>
+</main>
+{% endblock %}
 
-    <footer>
-        <nav>
-            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a>
-            <a href="{{ url_for('search') }}"><i class="fas fa-search"></i> Search</a>
-            <a href="{{ url_for('write') }}"><i class="fas fa-pen"></i> Write Review</a>
-        </nav>
-        <p class="copyright">&copy; 2025 Boss Reviews. All rights reserved.</p>
-    </footer>
-
-    <button class="dark-mode-toggle" aria-label="Toggle dark mode">
-        <i class="fas fa-moon"></i>
-        <i class="fas fa-sun"></i>
-    </button>
-
-    <script>
-        // Dark mode toggle functionality
-        const darkModeToggle = document.querySelector('.dark-mode-toggle');
-        const html = document.documentElement;
-        
-        // Check for saved user preference
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            html.classList.add('dark-mode');
-        }
-        
-        darkModeToggle.addEventListener('click', () => {
-            html.classList.toggle('dark-mode');
-            
-            // Save user preference
-            if (html.classList.contains('dark-mode')) {
-                localStorage.setItem('darkMode', 'enabled');
+{% block scripts %}
+<script>
+    // Client-side email validation
+    const emailInput = document.getElementById('work_email');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            const email = this.value;
+            if (email && !validateEmail(email)) {
+                if (!document.getElementById('emailError')) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error';
+                    errorDiv.id = 'emailError';
+                    errorDiv.textContent = 'Please enter a valid work email address';
+                    this.parentNode.appendChild(errorDiv);
+                }
             } else {
-                localStorage.setItem('darkMode', 'disabled');
+                const errorDiv = document.getElementById('emailError');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
             }
         });
-    </script>
-</body>
-</html>
+    }
+
+    function validateEmail(email) {
+        const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return re.test(String(email).toLowerCase());
+    }
+</script>
+{% endblock %}
