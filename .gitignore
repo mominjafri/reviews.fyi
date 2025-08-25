@@ -1,1 +1,9 @@
-credentials.json
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environment folder
+path/
+
+temp/
+

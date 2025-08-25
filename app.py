@@ -45,6 +45,18 @@ def home():
                          total_companies=total_companies,
                          recent_bosses=recent_bosses)
 
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
 @app.route('/write-existing/<int:employee_id>')
 def write_existing(employee_id):
     employee = Employee.query.get_or_404(employee_id)
@@ -246,39 +258,43 @@ def verify():
             # Get review data from session
             review_data = session.get('review_data')
             if not review_data:
-                flash('Session expired or invalid', 'error')
+                flash('Session expired or invalid. Please submit your review again.', 'error')
                 return redirect(url_for('write'))
             
-            # Create and save review
+            # Create and save review with correct column names
             new_review = Review(
                 employee_id=review_data['employee_id'],
-                first_name=review_data['first_name'],
-                last_name=review_data['last_name'],
-                company=review_data['company'],
                 years_experience=review_data['years_experience'],
                 overall_rating=review_data['overall_rating'],
-                fairness=review_data['fairness'],
-                communication=review_data['communication'],
-                technical=review_data['technical'],
-                leadership=review_data['leadership'],
+                fairness_rating=review_data.get('fairness', 0),
+                communication_rating=review_data.get('communication', 0),
+                technical_rating=review_data.get('technical', 0),
+                leadership_rating=review_data.get('leadership', 0),
                 review_text=review_data['review_text'],
                 verification_email=email,
-                verification_linkedin=linkedin
+                verification_linkedin=linkedin,
+                approved=None  # Pending approval
             )
             
             db.session.add(new_review)
             db.session.commit()
             
-            # Clear session and show success
+            # Clear session and redirect to thank you page
             session.pop('review_data', None)
-            return redirect(url_for('review_submitted'))
+            flash('Your review has been submitted for approval!', 'success')
+            return redirect(url_for('thank_you'))
             
         except Exception as e:
             db.session.rollback()
-            flash('Error saving your review', 'error')
+            app.logger.error(f"Error in verify route: {str(e)}")
+            flash('Error saving your review. Please try again.', 'error')
             return redirect(url_for('verify'))
     
     # GET request - show verification form
+    if 'review_data' not in session:
+        flash('No review data found. Please submit a review first.', 'error')
+        return redirect(url_for('write'))
+    
     return render_template('verify.html')
 
 @app.route('/vote/<int:review_id>/<vote_type>', methods=['POST'])
@@ -426,10 +442,10 @@ def submit_verification():
             company=review_data['company'],        # They might belong only in Employee
             years_experience=review_data['years_experience'],
             overall_rating=review_data['overall_rating'],
-            fairness_rating=review_data.get('fairness', 0),  # Changed from 'fairness'
-            communication_rating=review_data.get('communication', 0),  # Changed
-            technical_rating=review_data.get('technical', 0),  # Changed
-            leadership_rating=review_data.get('leadership', 0),  # Changed
+            fairness_rating=review_data.get('fairness', 0),
+            communication_rating=review_data.get('communication', 0),
+            technical_rating=review_data.get('technical', 0),
+            leadership_rating=review_data.get('leadership', 0),
             review_text=review_data['review_text'],
             verification_email=email,
             verification_linkedin=linkedin,

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}About reviews.fyi | Tech Boss Reviews{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+    <div class="container">
+        <header class="page-header">
+            <h1 class="page-title">About reviews.fyi</h1>
+            <p class="page-subtitle">
+                We help engineers and tech professionals share honest experiences about their leaders so others can make informed career decisions.
+            </p>
+        </header>
+
+        <div class="content-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-bullseye icon-lg"></i>
+                        Our Mission
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <p class="card-text">
+                        Increase transparency in the tech industry by providing a respectful, community-driven space for reviews of managers and leaders.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-cogs icon-lg"></i>
+                        How It Works
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <p class="card-text">
+                        Share your experience, rate leadership, and browse insights. We focus on constructive, actionable feedback—not personal attacks.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-shield-alt icon-lg"></i>
+                        Trust & Safety
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <p class="card-text">
+                        Reviews are moderated for clarity and respect. We protect user privacy and encourage evidence-based, fair reviews.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add any specific JavaScript for the about page here
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('About page loaded');
+    });
+</script>
+{% endblock %}

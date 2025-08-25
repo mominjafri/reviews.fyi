@@ -22,11 +22,39 @@
             </p>
         </div>
 
-        <form method="POST" action="{{ url_for('submit_verification') }}">
+        <!-- Debug Information -->
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #007bff;">
+            <h4 style="margin-top: 0; color: #007bff;">Debug Information:</h4>
+            <p><strong>Session has review_data:</strong> {{ 'review_data' in session }}</p>
+            <p><strong>Form Method:</strong> POST</p>
+            <p><strong>Action URL:</strong> {{ url_for('verify') }}</p>
+            {% if 'review_data' in session %}
+            <p><strong>Review Data Keys:</strong> {{ session['review_data'].keys()|list }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('verify') }}" id="verifyForm">
+            <!-- Add CSRF Token for better form handling -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+            
             <div class="verification-section">
                 <div class="form-group">
                     <label for="email">Work Email (Optional)</label>
-                    <input type="email" id="email" name="email" placeholder="your.name@company.com">
+                    <input type="email" id="email" name="email" placeholder="your.name@company.com" 
+                           value="{{ request.form.email if request.form }}">
                     <p class="input-hint">We'll send a verification link to this address</p>
                 </div>
                 
@@ -34,7 +62,8 @@
                 
                 <div class="form-group">
                     <label for="linkedin">LinkedIn Profile (Optional)</label>
-                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile"
+                           value="{{ request.form.linkedin if request.form }}">
                     <p class="input-hint">Public profile URL only</p>
                 </div>
             </div>
@@ -44,9 +73,16 @@
                     <i class="fas fa-lock"></i> Your information will be kept confidential 
                     and only used for verification purposes.
                 </p>
-                <button type="submit" class="btn btn--primary submit-btn">
+                
+                <!-- Debug submit button -->
+                <button type="submit" class="btn btn--primary submit-btn" id="submitBtn">
                     <i class="fas fa-paper-plane"></i> Submit Review
                 </button>
+                
+                <!-- Loading indicator -->
+                <div id="loading" style="display: none; margin-top: 10px;">
+                    <i class="fas fa-spinner fa-spin"></i> Submitting...
+                </div>
             </div>
         </form>
     </main>
@@ -55,4 +91,61 @@
         <!-- Your existing footer code -->
     </footer>
 </div>
+
+<!-- JavaScript for debugging and form handling -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('verifyForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loading = document.getElementById('loading');
+    
+    console.log('Verify form loaded');
+    console.log('Session has review_data: {{ 'review_data' in session }}');
+    
+    form.addEventListener('submit', function(e) {
+        console.log('Form submitted');
+        console.log('Email value:', document.getElementById('email').value);
+        console.log('LinkedIn value:', document.getElementById('linkedin').value);
+        
+        // Show loading indicator
+        submitBtn.disabled = true;
+        loading.style.display = 'block';
+    });
+    
+    // Check if form was previously submitted and failed
+    {% if request.method == 'POST' %}
+    console.log('Form was previously submitted via POST');
+    {% endif %}
+});
+</script>
+
+<style>
+.alert {
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.flash-messages {
+    margin-bottom: 20px;
+}
+</style>
 {% endblock %}
