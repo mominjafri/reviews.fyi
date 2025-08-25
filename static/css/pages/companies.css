@@ -1,4 +1,4 @@
-/* companies.css - Refined, accurate, and responsive styles using semantic tokens */
+/* companies.css - Updated to match top-rated page icon style */
 
 /* 1) Base + Tokens */
 *,
@@ -136,7 +136,7 @@ body {
   margin: 0 auto;
 }
 
-/* 4) Stats */
+/* 4) Stats - UPDATED to match top-rated style */
 .stats-section {
   padding: var(--space-8) 0;
   background: hsl(var(--surface-2));
@@ -159,10 +159,26 @@ body {
   text-align: center;
   box-shadow: var(--elev-1);
   border: 1px solid hsl(var(--border));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--elev-2);
 }
 .stat-icon {
-  font-size: 2rem;
-  margin-bottom: var(--space-3);
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-2)) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: var(--space-4);
+  font-size: 1.25rem;
 }
 .stat-value {
   font-size: 2rem;
@@ -236,30 +252,52 @@ body {
   margin: 0;
 }
 
-/* Update the company stats section in your companies.css */
+/* Company stats - UPDATED to match top-rated style */
 .company-stats {
-    margin-bottom: var(--space-6);
+  margin-bottom: var(--space-6);
 }
-
 .stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline; /* Align text on the baseline */
-    font-size: 0.95rem;
-    line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
 }
-
 .stat-row .stat-label {
-    color: hsl(var(--muted));
-    font-size: 0.95rem; /* Match the company-location size */
-    font-weight: 500; /* Slightly lighter than bold */
+  color: hsl(var(--muted));
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.stat-row .stat-value {
+  color: hsl(var(--text));
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
-.stat-row .stat-value {
-    color: hsl(var(--text));
-    font-size: 0.95rem; /* Same size as the label */
-    font-weight: 600; /* Slightly bolder than the label */
-    letter-spacing: 0.2px;
+/* Add rating stars to match top-rated page */
+.rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.star {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: conic-gradient(#0000 0 0);
+  mask: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><path d=%22M12 3.75l2.76 5.59 6.17.9-4.47 4.36 1.06 6.16L12 18.9l-5.52 2.9 1.06-6.16-4.47-4.36 6.17-.9L12 3.75z%22/></svg>') center/contain no-repeat;
+  background-color: #d1d5db;
+}
+.star.is-filled {
+  background-color: #fbbf24;
+}
+.star.is-partial {
+  background: linear-gradient(90deg, #fbbf24 50%, #d1d5db 50%);
 }
 
 /* 6) Buttons */
@@ -311,7 +349,50 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .nav-link,
   .company-card,
-  .btn {
+  .btn,
+  .stat-card {
     transition: none;
   }
+}
+
+/* Additional styles to match top-rated page */
+.company-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.company-rating-value {
+  font-weight: 700;
+  color: hsl(var(--text));
+  font-size: 1.1rem;
+}
+
+.company-reviews-count {
+  color: hsl(var(--muted));
+  font-size: 0.9rem;
+}
+
+/* Badge styles matching top-rated page */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.badge--success {
+  background-color: #dcfce7;
+  color: #166534;
+}
+.badge--warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+.badge--danger {
+  background-color: #fee2e2;
+  color: #991b1b;
 }

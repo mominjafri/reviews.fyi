@@ -9,6 +9,32 @@ import secrets
 from datetime import datetime
 
 app = Flask(__name__)
+
+database_url = os.getenv('DATABASE_URL')
+
+if database_url:
+    # Handle different database providers
+    if 'render.com' in database_url:
+        # Render PostgreSQL - add SSL requirement
+        if 'sslmode=require' not in database_url:
+            if '?' in database_url:
+                database_url += '&sslmode=require'
+            else:
+                database_url += '?sslmode=require'
+    elif 'heroku.com' in database_url:
+        # Heroku PostgreSQL - already includes SSL
+        pass
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    # Local development fallback
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', secrets.token_hex(32))
+
+db = SQLAlchemy(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', secrets.token_hex(32))
