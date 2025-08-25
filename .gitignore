@@ -1,3 +1,9 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+
 # Secrets and credentials
 credentials.json
 *.json
