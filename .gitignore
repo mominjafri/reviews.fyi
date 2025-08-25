@@ -1,9 +1,33 @@
-# Ignore Python cache
+# Secrets and credentials
+credentials.json
+*.json
+*.key
+*.pem
+*.crt
+.env
+.env.local
+.env.production
+.env.development
+secrets/
+keys/
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# Ignore virtual environment folder
-path/
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
-temp/
-
+# OS
+.DS_Store
+Thumbs.db
